@@ -25,10 +25,14 @@ public class Commands implements CommandExecutor {
 			sender.sendMessage(ChatColor.GREEN + "Use /cg help");
 			return true;
 		}
-		if (args[0].equalsIgnoreCase("reload")
-				&& sender.hasPermission("coloredgroups.reload")) {
-			mc.reload();
-			sender.sendMessage(pre + ChatColor.GREEN + "Reloaded variables");
+		if (args[0].equalsIgnoreCase("reload")) {
+			if (sender.hasPermission("coloredgroups.reload")) {
+				mc.reload();
+				sender.sendMessage(pre + ChatColor.GREEN + "Reloaded variables");
+			} else {
+				sender.sendMessage(pre + ChatColor.RED
+						+ "You dont have permission to reload");
+			}
 		} else if (args[0].equalsIgnoreCase("help")) {
 			sender.sendMessage(pre + ChatColor.GREEN
 					+ "Currently only /cg reload exists");
