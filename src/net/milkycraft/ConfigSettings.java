@@ -37,7 +37,6 @@ public class ConfigSettings extends ConfigLoader {
 
 	public void reload() {
 		super.rereadFromDisk();
-		plugin.profiles.clear();
 		load();
 		plugin.log("Variables reloaded from disk!");
 	}
