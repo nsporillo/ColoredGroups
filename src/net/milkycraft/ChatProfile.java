@@ -45,10 +45,10 @@ public class ChatProfile {
 
 	private void format() {
 		format = format
-				.replace(format.substring(0, 1) + "g",
+				.replace(format.substring(0, 1) + "%g",
 						getPrefix() + format.substring(0, 1) + getGroup())
-				.replace("p", getSuffix() + "%s")
-				.replace("m", getMuffix() + "%s")
+				.replace("%p", getSuffix() + "%s")
+				.replace("%m", getMuffix() + "%s")
 				.replace("null", ChatColor.WHITE.toString());
 	}
 }
