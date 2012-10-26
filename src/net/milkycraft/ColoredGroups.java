@@ -18,8 +18,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ColoredGroups extends JavaPlugin implements Listener {
 
 	private Privileges priv;
-	public ConfigSettings conf;
-	public Set<ChatProfile> profiles = new HashSet<ChatProfile>();
+	protected ConfigSettings conf;
+	protected Set<ChatProfile> profiles = new HashSet<ChatProfile>();
 
 	@Override
 	public void onEnable() {
@@ -50,10 +50,11 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onChat(AsyncPlayerChatEvent e) {
+		final String group = getGroup(e.getPlayer());
 		for (ChatProfile c : profiles) {
-			if (c.getGroup().equalsIgnoreCase(getGroup(e.getPlayer()))) {
-				e.setFormat(c.getPrefix() + "[" + getGroup(e.getPlayer()) + "]"
-						+ c.getSuffix() + "%s: " + c.getMuffix() + "%s");
+			if (c.getGroup().equalsIgnoreCase(group)) {
+				e.setFormat(c.getFormat());
+				break;
 			}
 		}
 		if (e.getFormat() == "<%1$s> %2$s") {
@@ -61,6 +62,7 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 					+ "%s:" + ChatColor.WHITE + " %s");
 		}
 	}
+	
 	/*
 	 * Below are Internally and possible externally accessed methods
 	 */
@@ -82,4 +84,9 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 	public Privileges getPrivileges() {
 		return priv;
 	}
+	
+	public Set<ChatProfile> getChatProfiles() {
+		return this.profiles;
+	}
+	
 }
