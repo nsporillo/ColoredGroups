@@ -48,6 +48,6 @@ public class ChatProfile {
 				.replace(format.substring(0, 1) + "g",
 						getPrefix() + format.substring(0, 1) + getGroup())
 				.replace("p", getSuffix() + "%s")
-				.replace("m", getMuffix() + "%s").replace("null", "§f");
+				.replace("m", getMuffix() + "%s").replace("null", ChatColor.WHITE.toString());
 	}
 }
