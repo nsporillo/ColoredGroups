@@ -13,7 +13,7 @@ public abstract class ConfigLoader {
 	protected File dataFolder;
 	protected ColoredGroups plugin;
 	protected static FileConfiguration config;
-	
+
 	public ConfigLoader(ColoredGroups plugin, String fileName) {
 		this.plugin = plugin;
 		this.fileName = fileName;

@@ -31,7 +31,8 @@ public class ConfigSettings extends ConfigLoader {
 		for (String keys : groups.getKeys(false)) {
 			ConfigurationSection vars = groups.getConfigurationSection(keys);
 			plugin.profiles.add(new ChatProfile(vars.getName(), vars
-					.getString("Prefix"), vars.getString("Suffix"), vars.getString("Muffix"), vars.getString("Format")));
+					.getString("Prefix"), vars.getString("Suffix"), vars
+					.getString("Muffix"), vars.getString("Format")));
 		}
 	}
 

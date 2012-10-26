@@ -27,7 +27,7 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 		conf = new ConfigSettings(this, "config.yml");
 		conf.load();
 		getServer().getPluginManager().registerEvents(this, this);
-		getCommand("coloredgroups").setExecutor(new Commands(this));
+		log("Loaded " + profiles.size() + " groups from config");
 	}
 
 	@Override

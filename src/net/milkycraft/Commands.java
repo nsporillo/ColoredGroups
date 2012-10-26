@@ -20,11 +20,13 @@ public class Commands implements CommandExecutor {
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.GREEN + "Using "
 					+ mc.getDescription().getName() + " v"
-					+ mc.getDescription().getVersion() + " by " + mc.getDescription().getAuthors().get(0));
+					+ mc.getDescription().getVersion() + " by "
+					+ mc.getDescription().getAuthors().get(0));
 			sender.sendMessage(ChatColor.GREEN + "Use /cg help");
 			return true;
 		}
-		if (args[0].equalsIgnoreCase("reload") && sender.hasPermission("coloredgroups.reload")) {
+		if (args[0].equalsIgnoreCase("reload")
+				&& sender.hasPermission("coloredgroups.reload")) {
 			mc.reload();
 			sender.sendMessage(pre + ChatColor.GREEN + "Reloaded variables");
 		} else if (args[0].equalsIgnoreCase("help")) {
