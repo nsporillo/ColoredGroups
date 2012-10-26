@@ -19,18 +19,18 @@ public class ChatProfile {
 		muffix = muffix.replace("&", "");
 	}
 
-	public ChatColor getPrefix() {
+	public final ChatColor getPrefix() {
 		return ChatColor.getByChar(prefix);
 	}
 
-	public ChatColor getSuffix() {
+	public final ChatColor getSuffix() {
 		return ChatColor.getByChar(suffix);
 	}
 	
-	public ChatColor getMuffix() {
+	public final ChatColor getMuffix() {
 		return ChatColor.getByChar(this.muffix);
 	}
-	public String getGroup() {
+	public final String getGroup() {
 		return g;
 	}
 
