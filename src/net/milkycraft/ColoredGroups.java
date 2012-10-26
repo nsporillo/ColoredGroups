@@ -29,7 +29,7 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(this, this);
 		getCommand("coloredgroups").setExecutor(new Commands(this));
 	}
-	
+
 	@Override
 	public void onDisable() {
 		profiles.clear();
@@ -41,7 +41,9 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 				.getPlugin("Privileges");
 		if (perms != null && perms.isEnabled()) {
 			this.priv = (Privileges) perms;
-			log("Hooked into privileges");
+			log("Found " + perms.getDescription().getName() + " v"
+					+ perms.getDescription().getVersion() + " by "
+					+ perms.getDescription().getAuthors().get(0));
 		} else {
 			log("Could not hook into privileges! Disabling...");
 			Bukkit.getPluginManager().disablePlugin(this);
@@ -62,16 +64,16 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 					+ "%s:" + ChatColor.WHITE + " %s");
 		}
 	}
-	
+
 	/*
 	 * Below are Internally and possible externally accessed methods
 	 */
-	
+
 	@SuppressWarnings("deprecation")
 	public String getGroup(Player player) {
 		return this.priv.getGroupManager().getGroup(player).getName();
 	}
-	
+
 	public void log(String log) {
 		this.getLogger().info(log);
 	}
@@ -80,13 +82,13 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 		profiles.clear();
 		conf.reload();
 	}
-	
+
 	public Privileges getPrivileges() {
 		return priv;
 	}
-	
+
 	public Set<ChatProfile> getChatProfiles() {
 		return this.profiles;
 	}
-	
+
 }
