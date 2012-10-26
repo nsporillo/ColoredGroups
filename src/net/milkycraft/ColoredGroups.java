@@ -29,6 +29,12 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(this, this);
 		getCommand("coloredgroups").setExecutor(new Commands(this));
 	}
+	
+	@Override
+	public void onDisable() {
+		profiles.clear();
+		profiles = null;
+	}
 
 	private void hook() {
 		Plugin perms = this.getServer().getPluginManager()
@@ -40,26 +46,6 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 			log("Could not hook into privileges! Disabling...");
 			Bukkit.getPluginManager().disablePlugin(this);
 		}
-	}
-
-	@SuppressWarnings("deprecation")
-	public String getGroup(Player player) {
-		return this.priv.getGroupManager().getGroup(player).getName();
-	}
-
-	@Override
-	public void onDisable() {
-		profiles.clear();
-		profiles = null;
-	}
-
-	public void log(String log) {
-		this.getLogger().info(log);
-	}
-
-	public void reload() {
-		profiles.clear();
-		conf.reload();
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -74,5 +60,26 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 			e.setFormat(ChatColor.GRAY + "[" + getGroup(e.getPlayer()) + "]"
 					+ "%s:" + ChatColor.WHITE + " %s");
 		}
+	}
+	/*
+	 * Below are Internally and possible externally accessed methods
+	 */
+	
+	@SuppressWarnings("deprecation")
+	public String getGroup(Player player) {
+		return this.priv.getGroupManager().getGroup(player).getName();
+	}
+	
+	public void log(String log) {
+		this.getLogger().info(log);
+	}
+
+	public void reload() {
+		profiles.clear();
+		conf.reload();
+	}
+	
+	public Privileges getPrivileges() {
+		return priv;
 	}
 }
