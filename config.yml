@@ -1,0 +1,22 @@
+# Configuration 
+# Use Color codes to represent colors 
+# Prefix is group name, Suffix is player name, Muffix is message 
+# Make sure your groups here match your groups in your privileges groups.yml
+# This version is currently only compatible with Privileges
+groups:
+  Default:
+    Prefix: '&2'
+    Suffix: '&b' 
+    Muffix: '&f'
+  Moderator:
+    Prefix: '&5'
+    Suffix: '&d'
+    Muffix: '&f'
+  Admin:
+    Prefix: '&c'
+    Suffix: '&e'
+    Muffix: '&f'
+  Owner:
+    Prefix: '&4'
+    Suffix: '&9'
+    Muffix: '&6'
