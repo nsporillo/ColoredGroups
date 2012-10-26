@@ -3,25 +3,25 @@
 # Prefix is group name, Suffix is player name, Muffix is message 
 # Make sure your groups here match your groups in your privileges groups.yml
 # This version is currently only compatible with Privileges
-# Formatting chat: g = Group, p = Name, m = Message
+# Formatting chat: %g = Group, %p = Name, %m = Message
 groups:
   Default:
     Prefix: '&2'
     Suffix: '&b' 
     Muffix: '&f'
-    Format: '[g]p: m'
+    Format: '[%g]%p: %m'
   Moderator:
     Prefix: '&5'
     Suffix: '&d'
     Muffix: '&f'
-    Format: '[g]p: m'
+    Format: '[%g]%p: %m'
   Admin:
     Prefix: '&c'
     Suffix: '&e'
     Muffix: '&f'
-    Format: '[g]p: m'
+    Format: '[%g]%p: %m'
   Owner:
     Prefix: '&4'
     Suffix: '&9'
     Muffix: '&6'
-    Format: '[g]p: m'
+    Format: '[%g]%p: %m'
