@@ -7,7 +7,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 /**
- * Listener to handle chat,Chat cant be handled in main class due to hooking bugs
+ * Listener to handle chat,Chat cant be handled in main class due to hooking
+ * bugs
  */
 public class ChatHandler implements Listener {
 
