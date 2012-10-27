@@ -8,6 +8,11 @@ import org.bukkit.command.CommandSender;
 public class Commands implements CommandExecutor {
 
 	private final String pre = ChatColor.AQUA + "[ColoredGroups] ";
+	private String[] cmds = { "/cg help", "/cg test all", "/cg test <group>",
+			"/cg reload hooks", "/cg reload config" };
+	private String[] helps = { "Help command for ColoredGroups",
+			"Tests all groups chat msgs", "Tests specific groups chat msgs",
+			"Rehooks into permissions", "Reloads variables from config" };
 	ColoredGroups mc;
 
 	public Commands(ColoredGroups mc) {
@@ -26,15 +31,16 @@ public class Commands implements CommandExecutor {
 			return true;
 		}
 		if (args[0].equalsIgnoreCase("reload")) {
-			if(args[1].equalsIgnoreCase("config")) {
+			if (args[1].equalsIgnoreCase("config")) {
 				if (sender.hasPermission("coloredgroups.reload")) {
 					mc.reload();
-					sender.sendMessage(pre + ChatColor.GREEN + "Reloaded variables");
+					sender.sendMessage(pre + ChatColor.GREEN
+							+ "Reloaded variables");
 				} else {
 					sender.sendMessage(pre + ChatColor.RED
 							+ "You dont have permission to reload");
 				}
-			} else if(args[1].equalsIgnoreCase("hooks")) {
+			} else if (args[1].equalsIgnoreCase("hooks")) {
 				if (sender.hasPermission("coloredgroups.reload")) {
 					mc.rehook();
 					sender.sendMessage(pre + ChatColor.GREEN + "Reloaded hooks");
@@ -43,12 +49,30 @@ public class Commands implements CommandExecutor {
 							+ "You dont have permission to reload");
 				}
 			}
-			
+
 		} else if (args[0].equalsIgnoreCase("help")) {
-			sender.sendMessage(pre + ChatColor.GREEN
-					+ "Currently only /cg reload exists");
+			sender.sendMessage(ChatColor.GREEN + "== ColoredGroups help ==");
+			for (int i = 0; i < 5; i++) {
+				sender.sendMessage(ChatColor.YELLOW + "[" + (i + 1) + "] "
+						+ cmds[i] + ChatColor.WHITE + " - " + ChatColor.GOLD
+						+ helps[i]);
+			}
+		} else if (args[0].equalsIgnoreCase("test")) {
+			if (sender.hasPermission("coloredgroups.test")) {
+				try {
+					if (args[1].equalsIgnoreCase("all")) {
+						for (ChatProfile c : mc.getChatProfiles()) {
+							sender.sendMessage(c.getExample());
+						}
+					} else {
+						sender.sendMessage(mc.getTestMessage(args[1]));
+					}
+				} catch (Exception exe) {
+					sender.sendMessage(ChatColor.RED + "Error: Argument "
+							+ exe.getLocalizedMessage() + " was empty");
+				}
+			}
 		}
 		return false;
 	}
-
 }
