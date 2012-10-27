@@ -1,15 +1,13 @@
 package net.milkycraft;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import java.util.ArrayList;
+import java.util.List;
 import net.krinsoft.privileges.Privileges;
 
 import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,7 +20,7 @@ import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.imp.Permissions;
 
-public class ColoredGroups extends JavaPlugin implements Listener {
+public class ColoredGroups extends JavaPlugin {
 
 	private Privileges priv;
 	private PermissionsEx pex;
@@ -30,7 +28,8 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 	private PermissionsPlugin pb;
 	private Permissions bp;
 	protected ConfigSettings conf;
-	protected Set<ChatProfile> profiles = new HashSet<ChatProfile>();
+	protected List<ChatProfile> profiles = new ArrayList<ChatProfile>();
+	private boolean tried = false;
 
 	@Override
 	public void onEnable() {
@@ -58,42 +57,36 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 				"PermissionsBukkit");
 		if (pri != null && pri.isEnabled()) {
 			this.priv = (Privileges) pri;
-			log("Found " + pri.getDescription().getName() + " v"
+			log("Hooked " + pri.getDescription().getName() + " v"
 					+ pri.getDescription().getVersion() + " by "
 					+ pri.getDescription().getAuthors().get(0));
 			return;
 		} else if (pex != null && pex.isEnabled()) {
 			this.pex = (PermissionsEx) pex;
-			log("Found " + pex.getDescription().getName() + " v"
+			log("Hooked " + pex.getDescription().getName() + " v"
 					+ pex.getDescription().getVersion() + " by "
 					+ pex.getDescription().getAuthors().get(0));
 			return;
 		} else if (gm != null && gm.isEnabled()) {
 			this.gm = (GroupManager) gm;
-			log("Found " + gm.getDescription().getName() + " v"
+			log("Hooked " + gm.getDescription().getName() + " v"
 					+ gm.getDescription().getVersion() + " by "
 					+ gm.getDescription().getAuthors().get(0));
 			return;
 		} else if (bp != null && bp.isEnabled()) {
 			this.bp = (Permissions) bp;
-			log("Found " + bp.getDescription().getName() + " v"
+			log("Hooked " + bp.getDescription().getName() + " v"
 					+ bp.getDescription().getVersion() + " by "
 					+ bp.getDescription().getAuthors().get(0));
 			return;
 		} else if (pb != null && pb.isEnabled()) {
 			this.pb = (PermissionsPlugin) pb;
-			log("Found " + pb.getDescription().getName() + " v"
+			log("Hooked " + pb.getDescription().getName() + " v"
 					+ pb.getDescription().getVersion() + " by "
 					+ pb.getDescription().getAuthors().get(0));
 			return;
 		} else {
-			log("A supported permissions plugin is needed for full functionality");
-			Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-				@Override
-				public void run() {
-					rehook();
-				}				
-			}, 20L);
+			tryAgain();
 		}
 	}
 
@@ -137,12 +130,28 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 		this.bp = null;
 		this.pb = null;
 		this.gm = null;
+		tried = false;
 		log("Unhooked from permissions plugins");
 	}
 
 	public void rehook() {
 		this.unhook();
 		this.hook();
+	}
+	
+	private void tryAgain() {
+		if(tried == false) {
+			tried = true;
+		} else {
+			log("Failed to hook into a permissions plugin");
+			return;
+		}
+		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+			@Override
+			public void run() {
+				hook();
+			}				
+		}, 1L);
 	}
 
 	public String getTestMessage(String group) {
@@ -166,7 +175,7 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 		return this.pb;
 	}
 
-	public Set<ChatProfile> getChatProfiles() {
+	public List<ChatProfile> getChatProfiles() {
 		return this.profiles;
 	}
 
