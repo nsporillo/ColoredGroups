@@ -51,4 +51,8 @@ public class ChatProfile {
 				.replace("%m", getMuffix() + "%s")
 				.replace("null", ChatColor.WHITE.toString());
 	}
+
+	public String getExample() {
+		return format.replace("%s", "test");
+	}
 }
