@@ -1,8 +1,7 @@
-# Configuration 
+# ColoredGroups Configuration
 # Use Color codes to represent colors 
 # Prefix is group name, Suffix is player name, Muffix is message 
-# Make sure your groups here match your groups in your privileges groups.yml
-# This version is currently only compatible with Privileges
+# These groups should match those in your supported permissions plugin
 # Formatting chat: %g = Group, %p = Name, %m = Message
 groups:
   Default:
