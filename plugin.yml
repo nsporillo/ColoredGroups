@@ -3,6 +3,7 @@ author: milkywayz
 main: net.milkycraft.ColoredGroups
 website: http://milkycraft.net
 version: 1.0
+
 commands:
     coloredgroups:
       aliases: cg
