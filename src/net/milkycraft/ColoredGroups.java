@@ -6,6 +6,8 @@ import java.util.Set;
 import net.krinsoft.privileges.Privileges;
 
 import org.anjocaido.groupmanager.GroupManager;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -32,15 +34,9 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 
 	@Override
 	public void onEnable() {
-		getServer().getScheduler().scheduleSyncDelayedTask(this,
-				new Runnable() {
-					@Override
-					public void run() {
-						hook();
-					}
-				}, 4L);
 		conf = new ConfigSettings(this, "config.yml");
 		conf.load();
+		hook();
 		getServer().getPluginManager().registerEvents(new ChatHandler(this),
 				this);
 		getCommand("coloredgroups").setExecutor(new Commands(this));
@@ -92,16 +88,13 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 			return;
 		} else {
 			log("A supported permissions plugin is needed for full functionality");
+			Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+				@Override
+				public void run() {
+					rehook();
+				}				
+			}, 20L);
 		}
-	}
-
-	private void unhook() {
-		this.priv = null;
-		this.pex = null;
-		this.bp = null;
-		this.pb = null;
-		this.gm = null;
-		log("Unhooked from permissions plugins");
 	}
 
 	/*
@@ -138,9 +131,27 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 		this.conf.reload();
 	}
 
+	private void unhook() {
+		this.priv = null;
+		this.pex = null;
+		this.bp = null;
+		this.pb = null;
+		this.gm = null;
+		log("Unhooked from permissions plugins");
+	}
+
 	public void rehook() {
 		this.unhook();
 		this.hook();
+	}
+
+	public String getTestMessage(String group) {
+		for (ChatProfile c : this.profiles) {
+			if (c.getGroup().equalsIgnoreCase(group)) {
+				return c.getExample();
+			}
+		}
+		return ChatColor.RED + "No groups match that name";
 	}
 
 	public Privileges getPrivileges() {
@@ -149,6 +160,10 @@ public class ColoredGroups extends JavaPlugin implements Listener {
 
 	public PermissionsEx getPermissionsEx() {
 		return this.pex;
+	}
+
+	public PermissionsPlugin getPermissionsBukkit() {
+		return this.pb;
 	}
 
 	public Set<ChatProfile> getChatProfiles() {
