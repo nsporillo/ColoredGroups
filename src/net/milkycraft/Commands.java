@@ -1,5 +1,7 @@
 package net.milkycraft;
 
+import net.milkycraft.addons.Addon;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -8,14 +10,14 @@ import org.bukkit.command.CommandSender;
 public class Commands implements CommandExecutor {
 
 	private final String pre = ChatColor.AQUA + "[ColoredGroups] ";
-	private String[] cmds = { "/cg help", "/cg test all", "/cg test <group>",
-			"/cg reload hooks", "/cg reload config" };
-	private String[] helps = { "Help command for ColoredGroups",
+	private final String[] cmds = { "/cg help", "/cg test all",
+			"/cg test <group>", "/cg reload hooks", "/cg reload config", "/cg reload addons" };
+	private final String[] helps = { "Help command for ColoredGroups",
 			"Tests all groups chat msgs", "Tests specific groups chat msgs",
-			"Rehooks into permissions", "Reloads variables from config" };
+			"Rehooks into permissions", "Reloads variables from config", "Reloads addons if any" };
 	ColoredGroups mc;
 
-	public Commands(ColoredGroups mc) {
+	public Commands(final ColoredGroups mc) {
 		this.mc = mc;
 	}
 
@@ -31,6 +33,10 @@ public class Commands implements CommandExecutor {
 			return true;
 		}
 		if (args[0].equalsIgnoreCase("reload")) {
+			if(args.length == 1) {
+				sender.sendMessage(ChatColor.RED + "Choose either config, hooks, or addons");
+				return true;
+			}
 			if (args[1].equalsIgnoreCase("config")) {
 				if (sender.hasPermission("coloredgroups.reload")) {
 					mc.reload();
@@ -48,11 +54,21 @@ public class Commands implements CommandExecutor {
 					sender.sendMessage(pre + ChatColor.RED
 							+ "You dont have permission to reload");
 				}
+			} else if (args[1].equalsIgnoreCase("addons")) {
+				if (sender.hasPermission("coloredgroups.reload")) {
+					mc.reloadAddons();
+					sender.sendMessage(pre + ChatColor.GREEN + "Reloaded addons:");
+					for(Addon a : mc.getAddons()) {
+						sender.sendMessage(ChatColor.YELLOW + a.getClass().getSimpleName() + " v" + a.getVersion() + " by " + a.getAuthors().get(0));
+					}
+				} else {
+					sender.sendMessage(pre + ChatColor.RED
+							+ "You dont have permission to reload");
+				}
 			}
-
 		} else if (args[0].equalsIgnoreCase("help")) {
 			sender.sendMessage(ChatColor.GREEN + "== ColoredGroups help ==");
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < cmds.length; i++) {
 				sender.sendMessage(ChatColor.YELLOW + "[" + (i + 1) + "] "
 						+ cmds[i] + ChatColor.WHITE + " - " + ChatColor.GOLD
 						+ helps[i]);
@@ -75,4 +91,5 @@ public class Commands implements CommandExecutor {
 		}
 		return false;
 	}
+	
 }
