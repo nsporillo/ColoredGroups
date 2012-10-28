@@ -3,6 +3,7 @@ package net.milkycraft;
 import java.io.File;
 import java.io.IOException;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -14,7 +15,7 @@ public abstract class ConfigLoader {
 	protected ColoredGroups plugin;
 	protected static FileConfiguration config;
 
-	public ConfigLoader(ColoredGroups plugin, String fileName) {
+	protected ConfigLoader(ColoredGroups plugin, String fileName) {
 		this.plugin = plugin;
 		this.fileName = fileName;
 		this.dataFolder = plugin.getDataFolder();
@@ -62,6 +63,50 @@ public abstract class ConfigLoader {
 	 */
 	protected void rereadFromDisk() {
 		config = YamlConfiguration.loadConfiguration(this.configFile);
+	}
+	
+	protected void createNewGroup(String group, String prefix, String suffix, String muffix, String format) {
+		ConfigurationSection groups = config.getConfigurationSection("groups");
+		if(groups.contains(group)) {
+			throw new UnsupportedOperationException("Cannot create duplicate group in config!");
+		}
+		groups.createSection(group);
+		ConfigurationSection keys = groups.getConfigurationSection(group);
+		keys.set("Prefix", prefix);
+		keys.set("Suffix", suffix);
+		keys.set("Muffix", muffix);
+		keys.set("Format", format);
+		this.saveConfig();
+		plugin.reload();
+	}
+	
+	protected void fillConfigWithGroups(String[] groupz, String prefix, String suffix, String muffix, String format) {
+		for(String g : groupz) {
+			ConfigurationSection groups = config.getConfigurationSection("groups");
+			groups.createSection(g);
+			ConfigurationSection keys = groups.getConfigurationSection(g);
+			keys.set("Prefix", prefix);
+			keys.set("Suffix", suffix);
+			keys.set("Muffix", muffix);
+			keys.set("Format", format);
+		}
+		this.saveConfig();
+		plugin.reload();
+	}
+	
+	protected void deleteGroup(String group) {
+		ConfigurationSection groups = config.getConfigurationSection("groups");
+		if(groups.contains(group)) {
+			try {
+			groups.set(group, null);
+			} catch(NullPointerException npe) {
+				plugin.log("Removing group threw a NullPointer");
+			}
+		} else {
+			throw new NullPointerException("Group does not exist");
+		}
+		this.saveConfig();
+		plugin.reload();
 	}
 
 	/**
