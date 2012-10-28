@@ -13,11 +13,10 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 public class ChatHandler implements Listener {
 
 	ColoredGroups cg;
-
 	public ChatHandler(ColoredGroups cg) {
 		this.cg = cg;
 	}
-
+	
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onChat(AsyncPlayerChatEvent e) {
 		final String group = cg.getGroup(e.getPlayer());
@@ -32,4 +31,5 @@ public class ChatHandler implements Listener {
 					+ ChatColor.WHITE + " %s");
 		}
 	}
+	
 }
