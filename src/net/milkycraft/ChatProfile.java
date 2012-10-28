@@ -2,17 +2,19 @@ package net.milkycraft;
 
 import org.bukkit.ChatColor;
 
-public class ChatProfile {
+public final class ChatProfile {
 
 	private String g;
+	private String sg;
 	private String prefix;
 	private String suffix;
 	private String muffix;
 	private String format;
 
-	public ChatProfile(String g, String prefix2, String suffix2,
+	protected ChatProfile(final String g, String prefix2, String suffix2,
 			String muffix2, String format2) {
 		this.g = g;
+		this.sg = this.g;
 		this.prefix = prefix2;
 		prefix = prefix.replace("&", "");
 		this.suffix = suffix2;
@@ -35,8 +37,16 @@ public class ChatProfile {
 		return ChatColor.getByChar(this.muffix);
 	}
 
-	public final String getGroup() {
+	public String getGroup() {
 		return g;
+	}
+
+	public String getShownGroup() {
+		return sg;
+	}
+
+	public void setShownGroup(final String newgroup) {
+		this.sg = newgroup;
 	}
 
 	public final String getFormat() {
@@ -46,7 +56,7 @@ public class ChatProfile {
 	private void format() {
 		format = format
 				.replace(format.substring(0, 1) + "%g",
-						getPrefix() + format.substring(0, 1) + getGroup())
+						getPrefix() + format.substring(0, 1) + getShownGroup())
 				.replace("%p", getSuffix() + "%s")
 				.replace("%m", getMuffix() + "%s")
 				.replace("null", ChatColor.WHITE.toString());
