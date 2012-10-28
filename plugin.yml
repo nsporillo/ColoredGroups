@@ -2,11 +2,12 @@ name: ColoredGroups
 author: milkywayz 
 main: net.milkycraft.ColoredGroups
 website: http://milkycraft.net
-version: 1.0
+version: 1.1
 
 commands:
     coloredgroups:
       aliases: cg
       description: The colored groups command
+    gca:
 
   
