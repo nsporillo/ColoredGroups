@@ -15,7 +15,7 @@ public abstract class ConfigLoader {
 	protected ColoredGroups plugin;
 	protected static FileConfiguration config;
 
-	protected ConfigLoader(ColoredGroups plugin, String fileName) {
+	public ConfigLoader(ColoredGroups plugin, String fileName) {
 		this.plugin = plugin;
 		this.fileName = fileName;
 		this.dataFolder = plugin.getDataFolder();
@@ -65,6 +65,15 @@ public abstract class ConfigLoader {
 		config = YamlConfiguration.loadConfiguration(this.configFile);
 	}
 	
+	/**
+	 * Api method to create a new config section for a group
+	 * @throws UnsupportedOperationException if group already exists in config
+	 * @param group
+	 * @param prefix
+	 * @param suffix
+	 * @param muffix
+	 * @param format
+	 */
 	protected void createNewGroup(String group, String prefix, String suffix, String muffix, String format) {
 		ConfigurationSection groups = config.getConfigurationSection("groups");
 		if(groups.contains(group)) {
@@ -80,28 +89,15 @@ public abstract class ConfigLoader {
 		plugin.reload();
 	}
 	
-	protected void fillConfigWithGroups(String[] groupz, String prefix, String suffix, String muffix, String format) {
-		for(String g : groupz) {
-			ConfigurationSection groups = config.getConfigurationSection("groups");
-			groups.createSection(g);
-			ConfigurationSection keys = groups.getConfigurationSection(g);
-			keys.set("Prefix", prefix);
-			keys.set("Suffix", suffix);
-			keys.set("Muffix", muffix);
-			keys.set("Format", format);
-		}
-		this.saveConfig();
-		plugin.reload();
-	}
-	
+	/**
+	 * Api method to delete a group from config
+	 * @throws NullPointerException if the group doesn't exist
+	 * @param group
+	 */
 	protected void deleteGroup(String group) {
 		ConfigurationSection groups = config.getConfigurationSection("groups");
 		if(groups.contains(group)) {
-			try {
 			groups.set(group, null);
-			} catch(NullPointerException npe) {
-				plugin.log("Removing group threw a NullPointer");
-			}
 		} else {
 			throw new NullPointerException("Group does not exist");
 		}
