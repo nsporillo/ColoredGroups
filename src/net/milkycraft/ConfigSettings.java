@@ -11,29 +11,20 @@ public class ConfigSettings extends ConfigLoader {
 	}
 
 	@Override
-	public void load() {
-		if (!configFile.exists()) {
-			dataFolder.mkdir();
-			super.plugin.saveDefaultConfig();
-		}
-		super.addDefaults();
-		loadKeys();
-	}
-
-	@Override
 	protected void loadKeys() {
 		ConfigurationSection groups = config.getConfigurationSection("groups");
 		for (String keys : groups.getKeys(false)) {
 			ConfigurationSection vars = groups.getConfigurationSection(keys);
-			super.plugin.profiles.add(new ChatProfile(vars.getName(), vars
-					.getString("Prefix"), vars.getString("Suffix"), vars
-					.getString("Muffix"), vars.getString("Format")));
+			super.plugin.getChatProfiles().add(new ChatProfile(vars.getName(), vars
+					.getName(), vars.getString("Prefix"), vars
+					.getString("Suffix"), vars.getString("Muffix"), vars
+					.getString("Format")));
 		}
 	}
 
-	public void reload() {
+	protected void reload() {
 		super.rereadFromDisk();
-		load();
+		super.load();
 		super.plugin.log("Variables reloaded from disk!");
 	}
 }
