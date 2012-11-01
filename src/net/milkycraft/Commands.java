@@ -1,7 +1,5 @@
 package net.milkycraft;
 
-import net.milkycraft.addons.Addon;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -57,10 +55,7 @@ public class Commands implements CommandExecutor {
 			} else if (args[1].equalsIgnoreCase("addons")) {
 				if (sender.hasPermission("coloredgroups.reload")) {
 					mc.reloadAddons();
-					sender.sendMessage(pre + ChatColor.GREEN + "Reloaded addons:");
-					for(Addon a : mc.getAddons()) {
-						sender.sendMessage(ChatColor.YELLOW + a.getClass().getSimpleName() + " v" + a.getVersion() + " by " + a.getAuthors().get(0));
-					}
+					sender.sendMessage(pre + ChatColor.GREEN + "Reloaded addons");
 				} else {
 					sender.sendMessage(pre + ChatColor.RED
 							+ "You dont have permission to reload");
