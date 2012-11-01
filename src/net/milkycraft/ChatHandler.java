@@ -20,7 +20,7 @@ public class ChatHandler implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onChat(AsyncPlayerChatEvent e) {
 		final String group = cg.getGroup(e.getPlayer());
-		for (ChatProfile c : cg.profiles) {
+		for (ChatProfile c : cg.getChatProfiles()) {
 			if (c.getGroup().equalsIgnoreCase(group)) {
 				e.setFormat(c.getFormat());
 				break;
