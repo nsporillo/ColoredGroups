@@ -1,7 +1,9 @@
 package net.milkycraft.addons;
 
 import java.io.File;
-import java.net.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +15,6 @@ public class AddonLoader {
 	private ClassLoader loader;
 
 	public AddonLoader(ColoredGroups cg) {
-		this.loader = null;
 		this.cg = cg;
 	}
 
@@ -34,7 +35,8 @@ public class AddonLoader {
 			loader = new URLClassLoader(new URL[] { dir.toURI().toURL() },
 					Addon.class.getClassLoader());
 		} catch (MalformedURLException ex) {
-			cg.log("Error with class loader");
+			cg.log("ClassLoader encountered an exception: ");
+			ex.printStackTrace();
 			return addons;
 		}
 		for (File file : dir.listFiles()) {
@@ -44,23 +46,22 @@ public class AddonLoader {
 			String name = file.getName().substring(0,
 					file.getName().lastIndexOf("."));
 			try {
-				Class<?> aclass = loader.loadClass(name);
+				Class<?> aclass = loader.loadClass(name);				
 				Object object = aclass.newInstance();
 				if (!(object instanceof Addon)) {
 					cg.log("Not a valid add-on: " + aclass.getSimpleName());
 					continue;
 				}
-				Addon addon = (Addon) object;
-				addons.add(addon);
-				cg.log("Loaded " + addon.getName() + " v"
-						+ addon.getVersion() + " by "
-						+ addon.getAuthors().get(0));
+				Addon a = (Addon) object;		
+				a.enable();
+				addons.add(a);
+				cg.log("Loaded " + a.getName() + " v"
+						+ a.getVersion() + " by "
+						+ a.getAuthors().get(0));
 			} catch (Exception ex) {
-				cg.log("Failed to load " + name + " : "
-						+ ex.getLocalizedMessage());
+				cg.log("A " + ex.getLocalizedMessage() + " caused " + name + " to fail to load!");
 			} catch (Error ex) {
-				cg.log("Failed to load " + name + " : "
-						+ ex.getLocalizedMessage());
+				cg.log("A " + ex.getLocalizedMessage() + " caused " + name + " to fail to load!");
 			}
 		}
 		return addons;
