@@ -8,6 +8,8 @@ import java.util.List;
  *
  */
 public interface Addon {
+	public void enable();
+	public void disable();
 	public String getVersion();
 	public String getName();
 	public String getDescription();
