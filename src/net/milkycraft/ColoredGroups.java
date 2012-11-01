@@ -24,18 +24,17 @@ import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.imp.Permissions;
 
-public class ColoredGroups extends JavaPlugin {
+public final class ColoredGroups extends JavaPlugin {
 
-	protected List<ChatProfile> profiles = new ArrayList<ChatProfile>();
+	private List<ChatProfile> profiles = new ArrayList<ChatProfile>();
 	private List<Addon> addons = new ArrayList<Addon>();
-	protected ConfigSettings conf;	
+	private ConfigSettings conf;	
 	private Privileges priv;
 	private PermissionsEx pex;
 	private GroupManager gm;
 	private PermissionsPlugin pb;
 	private Permissions bp;
 	private boolean tried = false;
-	
 
 	@Override
 	public void onEnable() {
@@ -45,8 +44,7 @@ public class ColoredGroups extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ChatHandler(this),
 				this);
 		getCommand("coloredgroups").setExecutor(new Commands(this));
-		addons.addAll(new AddonLoader(this).load(this.getDataFolder() + File.separator + "Addons"));
-		log("Loaded " + profiles.size() + " groups from config");
+		addons.addAll(new AddonLoader(this).load(this.getDataFolder() + File.separator + "addons"));
 	}
 
 	@Override
@@ -64,36 +62,58 @@ public class ColoredGroups extends JavaPlugin {
 				"PermissionsBukkit");
 		if (pri != null && pri.isEnabled()) {
 			this.priv = (Privileges) pri;
-			log("Hooked " + pri.getDescription().getName() + " v"
-					+ pri.getDescription().getVersion() + " by "
-					+ pri.getDescription().getAuthors().get(0));
+			h(priv);
 			return;
 		} else if (pex != null && pex.isEnabled()) {
 			this.pex = (PermissionsEx) pex;
-			log("Hooked " + pex.getDescription().getName() + " v"
-					+ pex.getDescription().getVersion() + " by "
-					+ pex.getDescription().getAuthors().get(0));
+			h(pex);
 			return;
 		} else if (gm != null && gm.isEnabled()) {
 			this.gm = (GroupManager) gm;
-			log("Hooked " + gm.getDescription().getName() + " v"
-					+ gm.getDescription().getVersion() + " by "
-					+ gm.getDescription().getAuthors().get(0));
+			h(gm);
 			return;
 		} else if (bp != null && bp.isEnabled()) {
 			this.bp = (Permissions) bp;
-			log("Hooked " + bp.getDescription().getName() + " v"
-					+ bp.getDescription().getVersion() + " by "
-					+ bp.getDescription().getAuthors().get(0));
+			h(bp);
 			return;
 		} else if (pb != null && pb.isEnabled()) {
 			this.pb = (PermissionsPlugin) pb;
-			log("Hooked " + pb.getDescription().getName() + " v"
-					+ pb.getDescription().getVersion() + " by "
-					+ pb.getDescription().getAuthors().get(0));
+			h(pb);
 			return;
 		} else {
 			tryAgain();
+		}
+	}
+
+	private void h(Plugin p) {
+		log("Hooked " + p.getDescription().getName() + " v"
+				+ p.getDescription().getVersion() + " by "
+				+ p.getDescription().getAuthors().get(0));	
+	}
+	
+	public void log(String log) {
+		this.getLogger().info(log);
+	}
+
+	public void reload() {
+		this.profiles.clear();
+		this.conf.reload();
+	}
+
+	public void rehook() {
+		this.unhook();
+		this.hook();
+	}
+
+	public void reloadAddons() {
+		Iterator<Addon> it = this.getAddons().iterator();
+		while(it.hasNext()) {
+			it.next().disable();
+			it.remove();
+		}
+		this.addons.addAll(new AddonLoader(this).load(this.getDataFolder() + File.separator + "addons"));
+		for(Addon a : this.addons) {
+			a.enable();
 		}
 	}
 
@@ -122,12 +142,6 @@ public class ColoredGroups extends JavaPlugin {
 		}, 1L);
 	}
 
-	/**
-	 * Gets a players group name for chat
-	 * 
-	 * @param player
-	 * @return
-	 */
 	@SuppressWarnings("deprecation")
 	public String getGroup(Player player) {
 		if (this.priv != null) {
@@ -149,47 +163,6 @@ public class ColoredGroups extends JavaPlugin {
 		return "Unknown";
 	}
 
-	/**
-	 * Log stuff to console using our prefix
-	 * 
-	 * @param log
-	 */
-	public void log(String log) {
-		this.getLogger().info(log);
-	}
-
-	/**
-	 * Reloads configuration values
-	 */
-	public void reload() {
-		this.profiles.clear();
-		this.conf.reload();
-	}
-
-	/**
-	 * Unhooks and then rehooks into permissions plugins Sort of a clarification
-	 * method..
-	 */
-	public void rehook() {
-		this.unhook();
-		this.hook();
-	}
-	
-	public void reloadAddons() {
-		this.addons.clear();
-		this.addons.addAll(new AddonLoader(this).load(this.getDataFolder() + File.separator + "Addons"));
-		this.log("Reloaded the following addons:");
-		for(Addon a : this.addons) {
-			this.log(a.getName() + " v" + a.getVersion() + " by " + a.getAuthors().get(0));
-		}
-	}
-
-	/**
-	 * Gets you an example of what that chat profile will look like
-	 * 
-	 * @param group
-	 * @return
-	 */
 	public String getTestMessage(String group) {
 		for (ChatProfile c : this.profiles) {
 			if (c.getGroup().equalsIgnoreCase(group)) {
@@ -199,91 +172,30 @@ public class ColoredGroups extends JavaPlugin {
 		return ChatColor.RED + "No groups match that name";
 	}
 
-	/**
-	 * Returns instance of Privileges' main class
-	 * 
-	 * @return
-	 */
-	public Privileges getPrivileges() {
-		return this.priv;
-	}
-
-	/**
-	 * Returns instance of PermissionsEx's main class
-	 * 
-	 * @return
-	 */
-	public PermissionsEx getPermissionsEx() {
-		return this.pex;
-	}
-
-	/**
-	 * Returns instance of PermissionsBukkit's main class
-	 * 
-	 * @return
-	 */
-	public PermissionsPlugin getPermissionsBukkit() {
-		return this.pb;
-	}
-
-	/**
-	 * Gets the list of chat profiles Doesnt let you add any because creating a
-	 * chat profile shouldn't work
-	 * 
-	 * @return
-	 */
 	public List<ChatProfile> getChatProfiles() {
 		return this.profiles;
 	}
-	
-	/**
-	 * Gets a list of all installed addons
-	 * @return
-	 */
+
 	public List<Addon> getAddons() {
 		return this.addons;
 	}
 	
-	/**
-	 * Creates a temporary chat profile Has sync block because profiles might be
-	 * iterated though while this new profile is being added Redundant profiles
-	 * only decrease performance of plugin
-	 * 
-	 * @param group
-	 * @param prefix
-	 * @param suffix
-	 * @param muffix
-	 * @param format
-	 */
-	public final void createTempChatProfile(final String group,
+	
+	public void createTempChatProfile(final String group, final String showngroup,
 			final String prefix, final String suffix, final String muffix,
 			final String format) {
 		synchronized (this) {
-			profiles.add(new ChatProfile(group, prefix, suffix, muffix, format));
+			profiles.add(new ChatProfile(group, showngroup, prefix, suffix, muffix, format));
 		}
 	}
 
-	/**
-	 * Creates a new group in config and reloads
-	 * 
-	 * @param group
-	 * @param prefix
-	 * @param suffix
-	 * @param muffix
-	 * @param format
-	 */
-	public final void createChatProfile(final String group,
+	public void createChatProfile(final String group,
 			final String prefix, final String suffix, String muffix,
 			String format) {
 		this.conf.createNewGroup(group, prefix, suffix, muffix, format);
 	}
 
-	/**
-	 * Thread-safely removes chat profile from cache
-	 * 
-	 * @param group
-	 */
-	public final void deleteTempChatProfile(final String group) {
+	public void deleteTempChatProfile(final String group) {
 		synchronized (this) {
 			Iterator<ChatProfile> it = this.profiles.iterator();
 			while (it.hasNext()) {
@@ -294,13 +206,7 @@ public class ColoredGroups extends JavaPlugin {
 		}
 	}
 
-	/**
-	 * Deletes a chat profile from config and thread-safely removes it from the
-	 * cache
-	 * 
-	 * @param group
-	 */
-	public final void deleteChatProfile(final String group) {
+	public void deleteChatProfile(final String group) {
 		this.conf.deleteGroup(group);
 		synchronized (this) {
 			Iterator<ChatProfile> it = this.profiles.iterator();
