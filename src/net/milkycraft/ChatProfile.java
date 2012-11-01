@@ -11,10 +11,10 @@ public final class ChatProfile {
 	private String muffix;
 	private String format;
 
-	protected ChatProfile(final String g, String prefix2, String suffix2,
+	protected ChatProfile(final String g, String sg ,String prefix2, String suffix2,
 			String muffix2, String format2) {
 		this.g = g;
-		this.sg = this.g;
+		this.sg = sg;
 		this.prefix = prefix2;
 		prefix = prefix.replace("&", "");
 		this.suffix = suffix2;
