@@ -6,10 +6,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-/**
- * Listener to handle chat,Chat cant be handled in main class due to hooking
- * bugs
- */
 public class ChatHandler implements Listener {
 
 	ColoredGroups cg;
@@ -19,6 +15,7 @@ public class ChatHandler implements Listener {
 	
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onChat(AsyncPlayerChatEvent e) {
+		// Declare players group now, we don't want to retrieve it more than once
 		final String group = cg.getGroup(e.getPlayer());
 		for (ChatProfile c : cg.getChatProfiles()) {
 			if (c.getGroup().equalsIgnoreCase(group)) {
@@ -26,7 +23,7 @@ public class ChatHandler implements Listener {
 				break;
 			}
 		}
-		if (e.getFormat() == "<%1$s> %2$s") {
+		if (e.getFormat().equals("<%1$s> %2$s")) {
 			e.setFormat(ChatColor.GRAY + "[" + group + "]" + "%s:"
 					+ ChatColor.WHITE + " %s");
 		}
