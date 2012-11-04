@@ -49,6 +49,9 @@ public final class ColoredGroups extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		for(Addon a : this.getAddons()) {
+			a.disable();
+		}
 		this.profiles.clear();
 		this.profiles = null;
 	}
@@ -104,6 +107,7 @@ public final class ColoredGroups extends JavaPlugin {
 		this.unhook();
 		this.hook();
 	}
+	
 
 	public void reloadAddons() {
 		Iterator<Addon> it = this.getAddons().iterator();
@@ -190,7 +194,7 @@ public final class ColoredGroups extends JavaPlugin {
 	}
 
 	public void createChatProfile(final String group,
-			final String prefix, final String suffix, String muffix,
+			final String prefix, final String suffix, final String muffix,
 			String format) {
 		this.conf.createNewGroup(group, prefix, suffix, muffix, format);
 	}
