@@ -3,6 +3,10 @@
 # Prefix is group name, Suffix is player name, Muffix is message 
 # These groups should match those in your supported permissions plugin
 # Formatting chat: %g = Group, %p = Name, %m = Message
+# You can change the [] to () or {} if you like, ex: (+g)
+# You can add spaces if you want, ex: [+g] %p: %m
+# If you want more advanced formatting / variables try an addon
+# http://dev.bukkit.org/server-mods/coloredgroups/forum/addons/
 groups:
   Default:
     Prefix: '&2'
