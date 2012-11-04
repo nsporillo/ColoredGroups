@@ -2,7 +2,7 @@ package net.milkycraft;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-public class ConfigSettings extends ConfigLoader {
+public class ConfigSettings extends YamlLoader {
 
 	public ConfigSettings(ColoredGroups plugin, String fileName) {
 		super(plugin, fileName);
