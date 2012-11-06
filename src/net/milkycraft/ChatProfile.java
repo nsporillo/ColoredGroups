@@ -66,4 +66,5 @@ public final class ChatProfile {
 	public String getExample() {
 		return this.format.replace("%s", "test");
 	}
+	
 }
