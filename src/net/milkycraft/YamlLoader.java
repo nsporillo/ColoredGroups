@@ -13,9 +13,9 @@ public abstract class YamlLoader {
 	protected File configFile;
 	protected File dataFolder;
 	protected ColoredGroups plugin;
-	protected static FileConfiguration config;
+	protected FileConfiguration config;
 
-	public YamlLoader(ColoredGroups plugin, String fileName) {
+	public YamlLoader(final ColoredGroups plugin, final String fileName) {
 		this.plugin = plugin;
 		this.fileName = fileName;
 		this.dataFolder = plugin.getDataFolder();
