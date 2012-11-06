@@ -5,7 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class Commands implements CommandExecutor {
+public final class Commands implements CommandExecutor {
 
 	private final String pre = ChatColor.AQUA + "[ColoredGroups] ";
 	private final String[] cmds = { "/cg help", "/cg test all",
@@ -13,7 +13,7 @@ public class Commands implements CommandExecutor {
 	private final String[] helps = { "Help command for ColoredGroups",
 			"Tests all groups chat msgs", "Tests specific groups chat msgs",
 			"Rehooks into permissions", "Reloads variables from config", "Reloads addons if any" };
-	ColoredGroups mc;
+	private ColoredGroups mc;
 
 	public Commands(final ColoredGroups mc) {
 		this.mc = mc;
