@@ -28,7 +28,8 @@ public final class ColoredGroups extends JavaPlugin {
 
 	private List<ChatProfile> profiles = new ArrayList<ChatProfile>();
 	private List<Addon> addons = new ArrayList<Addon>();
-	private ConfigSettings conf;	
+	private static ColoredGroups instance;
+	private YamlConfig conf;
 	private Privileges priv;
 	private PermissionsEx pex;
 	private GroupManager gm;
@@ -38,22 +39,24 @@ public final class ColoredGroups extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		conf = new ConfigSettings(this, "config.yml");
-		conf.load();
-		hook();
-		getServer().getPluginManager().registerEvents(new ChatHandler(this),
-				this);
-		getCommand("coloredgroups").setExecutor(new Commands(this));
-		addons.addAll(new AddonLoader(this).load(this.getDataFolder() + File.separator + "addons"));
+		instance = this;
+		this.conf = new YamlConfig(this, "config.yml");
+		this.conf.load();
+		this.hook();
+		Bukkit.getPluginManager().registerEvents(new ChatHandler(this), this);
+		this.getCommand("coloredgroups").setExecutor(new Commands(this));
+		this.addons.addAll(new AddonLoader(this).load(this.getDataFolder()
+				+ File.separator + "addons"));
 	}
 
 	@Override
 	public void onDisable() {
-		for(Addon a : this.getAddons()) {
+		for (Addon a : this.getAddons()) {
 			a.disable();
 		}
-		this.profiles.clear();
 		this.profiles = null;
+		this.addons = null;
+		instance = null;
 	}
 
 	private void hook() {
@@ -91,11 +94,15 @@ public final class ColoredGroups extends JavaPlugin {
 	private void h(Plugin p) {
 		log("Hooked " + p.getDescription().getName() + " v"
 				+ p.getDescription().getVersion() + " by "
-				+ p.getDescription().getAuthors().get(0));	
+				+ p.getDescription().getAuthors().get(0));
 	}
-	
+
 	public void log(String log) {
 		this.getLogger().info(log);
+	}
+
+	public void log(Addon a, String log) {
+		this.getLogger().info("[" + a.getName() + "] " + log);
 	}
 
 	public void reload() {
@@ -107,16 +114,16 @@ public final class ColoredGroups extends JavaPlugin {
 		this.unhook();
 		this.hook();
 	}
-	
 
 	public void reloadAddons() {
 		Iterator<Addon> it = this.getAddons().iterator();
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			it.next().disable();
 			it.remove();
 		}
-		this.addons.addAll(new AddonLoader(this).load(this.getDataFolder() + File.separator + "addons"));
-		for(Addon a : this.addons) {
+		this.addons.addAll(new AddonLoader(this).load(this.getDataFolder()
+				+ File.separator + "addons"));
+		for (Addon a : this.addons) {
 			a.enable();
 		}
 	}
@@ -184,18 +191,21 @@ public final class ColoredGroups extends JavaPlugin {
 		return this.addons;
 	}
 	
-	
-	public void createTempChatProfile(final String group, final String showngroup,
-			final String prefix, final String suffix, final String muffix,
-			final String format) {
+	public static ColoredGroups getPlugin() {
+		return instance;
+	}
+
+	public void createTempChatProfile(final String group,
+			final String showngroup, final String prefix, final String suffix,
+			final String muffix, final String format) {
 		synchronized (this) {
-			profiles.add(new ChatProfile(group, showngroup, prefix, suffix, muffix, format));
+			profiles.add(new ChatProfile(group, showngroup, prefix, suffix,
+					muffix, format));
 		}
 	}
 
-	public void createChatProfile(final String group,
-			final String prefix, final String suffix, final String muffix,
-			String format) {
+	public void createChatProfile(final String group, final String prefix,
+			final String suffix, final String muffix, final String format) {
 		this.conf.createNewGroup(group, prefix, suffix, muffix, format);
 	}
 
