@@ -148,6 +148,7 @@ public final class ColoredGroups extends JavaPlugin {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
 			@Override
 			public void run() {
+				//Rehooks after everything is enabled, only needed for PermissionsBukkit
 				hook();
 			}
 		}, 1L);

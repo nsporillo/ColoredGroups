@@ -18,13 +18,6 @@ public class AddonLoader {
 		this.cg = cg;
 	}
 
-	/**
-	 * Loads addons Based off of the listener loader in Votifier All credit
-	 * where credit is due
-	 * 
-	 * @param directory
-	 * @return
-	 */
 	public List<Addon> load(String directory) {
 		List<Addon> addons = new ArrayList<Addon>();
 		File dir = new File(directory);
@@ -52,7 +45,7 @@ public class AddonLoader {
 					cg.log("Not a valid add-on: " + aclass.getSimpleName());
 					continue;
 				}
-				Addon a = (Addon) object;		
+				Addon a = (Addon) object;	
 				a.enable();
 				addons.add(a);
 				cg.log("Loaded " + a.getName() + " v"
