@@ -2,8 +2,11 @@ package net.milkycraft;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
 import net.krinsoft.privileges.Privileges;
 import net.milkycraft.addons.Addon;
 import net.milkycraft.addons.AddonLoader;
@@ -35,14 +38,13 @@ public final class ColoredGroups extends JavaPlugin {
 	private GroupManager gm;
 	private PermissionsPlugin pb;
 	private Permissions bp;
-	private boolean tried = false;
 
 	@Override
 	public void onEnable() {
 		instance = this;
 		this.conf = new YamlConfig(this, "config.yml");
 		this.conf.load();
-		this.hook();
+		this.hook_();
 		Bukkit.getPluginManager().registerEvents(new ChatHandler(this), this);
 		this.getCommand("coloredgroups").setExecutor(new Commands(this));
 		this.addons.addAll(new AddonLoader(this).load(this.getDataFolder()
@@ -57,6 +59,15 @@ public final class ColoredGroups extends JavaPlugin {
 		this.profiles = null;
 		this.addons = null;
 		instance = null;
+	}
+
+	private void hook_() {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+			@Override
+			public void run() {
+				hook();
+			}
+		}, 1L);
 	}
 
 	private void hook() {
@@ -87,7 +98,7 @@ public final class ColoredGroups extends JavaPlugin {
 			h(pb);
 			return;
 		} else {
-			tryAgain();
+			this.log("Could not find a supported permissions plugin");
 		}
 	}
 
@@ -110,11 +121,6 @@ public final class ColoredGroups extends JavaPlugin {
 		this.conf.reload();
 	}
 
-	public void rehook() {
-		this.unhook();
-		this.hook();
-	}
-
 	public void reloadAddons() {
 		Iterator<Addon> it = this.getAddons().iterator();
 		while (it.hasNext()) {
@@ -123,9 +129,11 @@ public final class ColoredGroups extends JavaPlugin {
 		}
 		this.addons.addAll(new AddonLoader(this).load(this.getDataFolder()
 				+ File.separator + "addons"));
-		for (Addon a : this.addons) {
-			a.enable();
-		}
+	}
+
+	public void rehook() {
+		this.unhook();
+		this.hook();
 	}
 
 	private void unhook() {
@@ -134,28 +142,12 @@ public final class ColoredGroups extends JavaPlugin {
 		this.bp = null;
 		this.pb = null;
 		this.gm = null;
-		tried = false;
 		log("Unhooked from permissions plugins");
 	}
 
-	private void tryAgain() {
-		if (tried == false) {
-			tried = true;
-		} else {
-			log("Failed to hook into a permissions plugin");
-			return;
-		}
-		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-			@Override
-			public void run() {
-				//Rehooks after everything is enabled, only needed for PermissionsBukkit
-				hook();
-			}
-		}, 1L);
-	}
-
 	@SuppressWarnings("deprecation")
-	public String getGroup(Player player) {
+	public String getGroup(final Player player) {
+		final String name = player.getName();
 		if (this.priv != null) {
 			return this.priv.getGroupManager().getGroup(player).getName();
 		} else if (this.pex != null) {
@@ -164,12 +156,12 @@ public final class ColoredGroups extends JavaPlugin {
 			return groups[0].getName();
 		} else if (this.gm != null) {
 			return this.gm.getWorldsHolder().getWorldPermissions(player)
-					.getGroup(player.getName());
+					.getGroup(name);
 		} else if (this.pb != null) {
-			return this.pb.getGroups(player.getName()).get(0).getName();
+			return this.pb.getGroups(name).get(0).getName();
 		} else if (this.bp != null) {
 			String[] groups = ApiLayer.getGroups(player.getWorld().getName(),
-					CalculableType.USER, player.getName());
+					CalculableType.USER, name);
 			return groups[0];
 		}
 		return "Unknown";
@@ -191,18 +183,20 @@ public final class ColoredGroups extends JavaPlugin {
 	public List<Addon> getAddons() {
 		return this.addons;
 	}
-	
+
 	public static ColoredGroups getPlugin() {
-		return instance;
+		return ColoredGroups.instance;
+	}
+
+	public List<ChatColor> getColors() {
+		return Arrays.asList(ChatColor.values());
 	}
 
 	public void createTempChatProfile(final String group,
 			final String showngroup, final String prefix, final String suffix,
 			final String muffix, final String format) {
-		synchronized (this) {
-			profiles.add(new ChatProfile(group, showngroup, prefix, suffix,
-					muffix, format));
-		}
+		profiles.add(new ChatProfile(group, showngroup, prefix, suffix, muffix,
+				format));
 	}
 
 	public void createChatProfile(final String group, final String prefix,
@@ -211,7 +205,7 @@ public final class ColoredGroups extends JavaPlugin {
 	}
 
 	public void deleteTempChatProfile(final String group) {
-		synchronized (this) {
+		synchronized (this.profiles) {
 			Iterator<ChatProfile> it = this.profiles.iterator();
 			while (it.hasNext()) {
 				if (it.next().getGroup().equalsIgnoreCase(group)) {
@@ -223,7 +217,7 @@ public final class ColoredGroups extends JavaPlugin {
 
 	public void deleteChatProfile(final String group) {
 		this.conf.deleteGroup(group);
-		synchronized (this) {
+		synchronized (this.profiles) {
 			Iterator<ChatProfile> it = this.profiles.iterator();
 			while (it.hasNext()) {
 				if (it.next().getGroup().equalsIgnoreCase(group)) {
@@ -231,5 +225,9 @@ public final class ColoredGroups extends JavaPlugin {
 				}
 			}
 		}
+	}
+	
+	public void modifyChatProfile(final String group, Map<String, String> modifiers) {
+		this.conf.modifyGroup(group, modifiers);
 	}
 }
