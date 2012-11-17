@@ -14,10 +14,15 @@ public final class YamlConfig extends YamlLoader {
 		ConfigurationSection groups = config.getConfigurationSection("groups");
 		for (String keys : groups.getKeys(false)) {
 			ConfigurationSection vars = groups.getConfigurationSection(keys);
-			super.plugin.getChatProfiles().add(new ChatProfile(vars.getName(), vars
-					.getName(), vars.getString("Prefix"), vars
-					.getString("Suffix"), vars.getString("Muffix"), vars
-					.getString("Format")));
+			if (vars.getString("ShownGroup") == null) {
+				vars.set("ShownGroup", vars.getName());
+				super.saveConfig();
+			}
+			super.plugin.getChatProfiles().add(
+					new ChatProfile(vars.getName(), vars
+							.getString("ShownGroup"), vars.getString("Prefix"),
+							vars.getString("Suffix"), vars.getString("Muffix"),
+							vars.getString("Format")));
 		}
 	}
 
