@@ -2,6 +2,7 @@
 # Use Color codes to represent colors 
 # Prefix is group name, Suffix is player name, Muffix is message 
 # These groups should match those in your supported permissions plugin
+# The ShownGroup is the group shown in chat
 # Formatting chat: %g = Group, %p = Name, %m = Message
 # You can change the [] to () or {} if you like, ex: (+g)
 # You can add spaces if you want, ex: [+g] %p: %m
@@ -13,18 +14,22 @@ groups:
     Suffix: '&b' 
     Muffix: '&f'
     Format: '[%g]%p: %m'
+    ShownGroup: 'Default'
   Moderator:
     Prefix: '&5'
     Suffix: '&d'
     Muffix: '&f'
     Format: '[%g]%p: %m'
+    ShownGroup: 'Moderator'
   Admin:
     Prefix: '&c'
     Suffix: '&e'
     Muffix: '&f'
     Format: '[%g]%p: %m'
+    ShownGroup: 'Administrator'
   Owner:
     Prefix: '&4'
     Suffix: '&9'
     Muffix: '&6'
     Format: '[%g]%p: %m'
+    ShownGroup: 'Owner'
