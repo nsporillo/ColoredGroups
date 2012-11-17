@@ -2,6 +2,8 @@ package net.milkycraft;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -52,20 +54,24 @@ public abstract class YamlLoader {
 	protected void rereadFromDisk() {
 		config = YamlConfiguration.loadConfiguration(this.configFile);
 	}
-	
+
 	/**
 	 * Api method to create a new config section for a group
-	 * @throws UnsupportedOperationException if group already exists in config
+	 * 
+	 * @throws UnsupportedOperationException
+	 *             if group already exists in config
 	 * @param group
 	 * @param prefix
 	 * @param suffix
 	 * @param muffix
 	 * @param format
 	 */
-	protected void createNewGroup(final String group, final String prefix, final String suffix, final String muffix, final String format) {
+	protected void createNewGroup(final String group, final String prefix,
+			final String suffix, final String muffix, final String format) {
 		ConfigurationSection groups = config.getConfigurationSection("groups");
-		if(groups.contains(group)) {
-			throw new UnsupportedOperationException("Cannot create duplicate group in config!");
+		if (groups.contains(group)) {
+			throw new UnsupportedOperationException(
+					"Cannot create duplicate group in config!");
 		}
 		groups.createSection(group);
 		ConfigurationSection keys = groups.getConfigurationSection(group);
@@ -76,15 +82,17 @@ public abstract class YamlLoader {
 		this.saveConfig();
 		plugin.reload();
 	}
-	
+
 	/**
 	 * Api method to delete a group from config
-	 * @throws NullPointerException if the group doesn't exist
+	 * 
+	 * @throws NullPointerException
+	 *             if the group doesn't exist
 	 * @param group
 	 */
 	protected void deleteGroup(final String group) {
 		ConfigurationSection groups = config.getConfigurationSection("groups");
-		if(groups.contains(group)) {
+		if (groups.contains(group)) {
 			groups.set(group, null);
 		} else {
 			throw new NullPointerException("Group does not exist");
@@ -92,6 +100,27 @@ public abstract class YamlLoader {
 		this.saveConfig();
 		plugin.reload();
 	}
+
+	/**
+	 * 
+	 * @param group
+	 * @param modifiers
+	 */
+	protected void modifyGroup(final String group, final Map<String, String> modifiers) {
+		ConfigurationSection groups = config.getConfigurationSection("groups");
+		if (!groups.contains(group)) {
+			throw new NullPointerException(
+					"Cannot modify unknown group in config!");
+		}
+		ConfigurationSection keys = groups.getConfigurationSection(group);
+		for(Entry<String, String> entry : modifiers.entrySet()) {
+			keys.set(entry.getKey(), entry.getValue());
+		}
+		this.saveConfig();
+		plugin.reload();
+	}
+	
+	
 
 	/**
 	 * Add the defaults to this config file.
