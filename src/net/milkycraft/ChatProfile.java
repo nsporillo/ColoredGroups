@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 
 public final class ChatProfile {
 
-	private String group;
+	private final String group;
 	private String showngroup;
 	private String prefix;
 	private String suffix;
@@ -15,38 +15,54 @@ public final class ChatProfile {
 			String muffix2, String format2) {
 		this.group = g;
 		this.setShownGroup(sg);
-		this.prefix = prefix2.replace("&", "");
-		this.suffix = suffix2.replace("&", "");
-		this.muffix = muffix2.replace("&", "");
+		this.setPrefix(prefix2);
+		this.setSuffix(suffix2);
+		this.setMuffix(muffix2);
 		this.format(format2);
 	}
 
-	public ChatColor getPrefix() {
-		return ChatColor.getByChar(this.prefix);
+	public String getPrefix() {
+		return this.prefix;
 	}
 
-	public ChatColor getSuffix() {
-		return ChatColor.getByChar(this.suffix);
+	public String getSuffix() {
+		return this.suffix;
 	}
 
-	public ChatColor getMuffix() {
-		return ChatColor.getByChar(this.muffix);
+	public String getMuffix() {
+		return this.muffix;
+	}
+
+	public String getShownGroup() {
+		return this.showngroup;
+	}
+
+	public String getExample() {
+		return this.format.replace("%1$s", "player").replace("%2$s", "message");
+	}
+
+	public String getFormat() {
+		return this.format;
 	}
 
 	public String getGroup() {
 		return this.group;
 	}
 
-	public String getShownGroup() {
-		return this.showngroup;
+	public void setPrefix(String newprefix) {
+		this.prefix = ChatColor.translateAlternateColorCodes('&', newprefix);
 	}
-	
-	public String getExample() {
-		return this.format.replace("%1$s", "player").replace("%2$s", "message");
+
+	public void setSuffix(String newsuffix) {
+		this.suffix = ChatColor.translateAlternateColorCodes('&', newsuffix);
 	}
-	
-	public String getFormat() {
-		return this.format;
+
+	public void setMuffix(String newmuffix) {
+		this.muffix = ChatColor.translateAlternateColorCodes('&', newmuffix);
+	}
+
+	public void setName(String newname) {
+		this.showngroup = newname;
 	}
 
 	private void setShownGroup(String newgroup) {
@@ -61,55 +77,4 @@ public final class ChatProfile {
 				.replace("%m", getMuffix() + "%2$s")
 				.replace("null", ChatColor.WHITE.toString());
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ChatProfile other = (ChatProfile) obj;
-		if (format == null) {
-			if (other.format != null)
-				return false;
-		} else if (!format.equals(other.format))
-			return false;
-		if (group == null) {
-			if (other.group != null)
-				return false;
-		} else if (!group.equals(other.group))
-			return false;
-		if (muffix == null) {
-			if (other.muffix != null)
-				return false;
-		} else if (!muffix.equals(other.muffix))
-			return false;
-		if (prefix == null) {
-			if (other.prefix != null)
-				return false;
-		} else if (!prefix.equals(other.prefix))
-			return false;
-		if (showngroup == null) {
-			if (other.showngroup != null)
-				return false;
-		} else if (!showngroup.equals(other.showngroup))
-			return false;
-		if (suffix == null) {
-			if (other.suffix != null)
-				return false;
-		} else if (!suffix.equals(other.suffix))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "ChatProfile [group=" + group + ", showngroup=" + showngroup
-				+ ", prefix=" + prefix + ", suffix=" + suffix + ", muffix="
-				+ muffix + ", format=" + ChatColor.translateAlternateColorCodes('&', format) + "]";
-	}
-
-
 }
