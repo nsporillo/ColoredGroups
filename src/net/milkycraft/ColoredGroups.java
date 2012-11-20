@@ -48,7 +48,9 @@ public final class ColoredGroups extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		this.getBackupManager().create(new Date());
+		if (this.getConfiguration().backup) {
+			this.getBackupManager().create(new Date());
+		}
 		this.profiles = null;
 		instance = null;
 	}
@@ -171,7 +173,7 @@ public final class ColoredGroups extends JavaPlugin {
 	public static ColoredGroups getPlugin() {
 		return ColoredGroups.instance;
 	}
-	
+
 	public BackupManager getBackupManager() {
 		return this.backup;
 	}
