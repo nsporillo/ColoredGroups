@@ -6,8 +6,8 @@
 # Formatting chat: %g = Group, %p = Name, %m = Message
 # You can change the [] to () or {} if you like, ex: (+g)
 # You can add spaces if you want, ex: [+g] %p: %m
-# If you want more advanced formatting / variables try an addon
-# http://dev.bukkit.org/server-mods/coloredgroups/forum/addons/
+# Want a color and a display modifier? Use 'color+modifier' Ex: '&4&n'
+# If you want the ability to use /cg set in game allow 'in-game-set'
 groups:
   Default:
     Prefix: '&2'
@@ -29,7 +29,13 @@ groups:
     ShownGroup: 'Administrator'
   Owner:
     Prefix: '&4'
-    Suffix: '&9'
+    Suffix: '&9&n'
     Muffix: '&6'
     Format: '[%g]%p: %m'
     ShownGroup: 'Owner'
+options:
+  debug: false
+  in-game-set: true
+  backup-on-disable: true
+  
+  
