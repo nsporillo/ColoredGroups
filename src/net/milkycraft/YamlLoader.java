@@ -66,8 +66,8 @@ public abstract class YamlLoader {
 	 * @param muffix
 	 * @param format
 	 */
-	protected void createNewGroup(final String group, final String prefix,
-			final String suffix, final String muffix, final String format) {
+	protected void createNewGroup(String group, String prefix, String suffix,
+			String muffix, String format, String shownGroup) {
 		ConfigurationSection groups = config.getConfigurationSection("groups");
 		if (groups.contains(group)) {
 			throw new UnsupportedOperationException(
@@ -78,6 +78,7 @@ public abstract class YamlLoader {
 		keys.set("Prefix", prefix);
 		keys.set("Suffix", suffix);
 		keys.set("Muffix", muffix);
+		keys.set("ShownGroup", shownGroup);
 		keys.set("Format", format);
 		this.saveConfig();
 		plugin.reload();
@@ -106,21 +107,20 @@ public abstract class YamlLoader {
 	 * @param group
 	 * @param modifiers
 	 */
-	protected void modifyGroup(final String group, final Map<String, String> modifiers) {
+	protected void modifyGroup(final String group,
+			final Map<String, String> modifiers) {
 		ConfigurationSection groups = config.getConfigurationSection("groups");
 		if (!groups.contains(group)) {
 			throw new NullPointerException(
 					"Cannot modify unknown group in config!");
 		}
 		ConfigurationSection keys = groups.getConfigurationSection(group);
-		for(Entry<String, String> entry : modifiers.entrySet()) {
+		for (Entry<String, String> entry : modifiers.entrySet()) {
 			keys.set(entry.getKey(), entry.getValue());
 		}
 		this.saveConfig();
 		plugin.reload();
 	}
-	
-	
 
 	/**
 	 * Add the defaults to this config file.
