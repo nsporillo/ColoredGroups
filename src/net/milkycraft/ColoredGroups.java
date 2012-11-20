@@ -1,15 +1,11 @@
 package net.milkycraft;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import net.krinsoft.privileges.Privileges;
-import net.milkycraft.addons.Addon;
-import net.milkycraft.addons.AddonLoader;
 
 import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.Bukkit;
@@ -30,8 +26,8 @@ import de.bananaco.bpermissions.imp.Permissions;
 public final class ColoredGroups extends JavaPlugin {
 
 	private List<ChatProfile> profiles = new ArrayList<ChatProfile>();
-	private List<Addon> addons = new ArrayList<Addon>();
 	private static ColoredGroups instance;
+	private BackupManager backup;
 	private YamlConfig conf;
 	private Privileges priv;
 	private PermissionsEx pex;
@@ -47,17 +43,13 @@ public final class ColoredGroups extends JavaPlugin {
 		this.hook_();
 		Bukkit.getPluginManager().registerEvents(new ChatHandler(this), this);
 		this.getCommand("coloredgroups").setExecutor(new Commands(this));
-		this.addons.addAll(new AddonLoader(this).load(this.getDataFolder()
-				+ File.separator + "addons"));
+		this.backup = new BackupManager(this);
 	}
 
 	@Override
 	public void onDisable() {
-		for (Addon a : this.getAddons()) {
-			a.disable();
-		}
+		this.getBackupManager().create(new Date());
 		this.profiles = null;
-		this.addons = null;
 		instance = null;
 	}
 
@@ -112,23 +104,15 @@ public final class ColoredGroups extends JavaPlugin {
 		this.getLogger().info(log);
 	}
 
-	public void log(Addon a, String log) {
-		this.getLogger().info("[" + a.getName() + "] " + log);
+	public void debug(String debug) {
+		if (this.getConfiguration().debug) {
+			this.getLogger().info("[Debug] " + debug);
+		}
 	}
 
 	public void reload() {
 		this.profiles.clear();
 		this.conf.reload();
-	}
-
-	public void reloadAddons() {
-		Iterator<Addon> it = this.getAddons().iterator();
-		while (it.hasNext()) {
-			it.next().disable();
-			it.remove();
-		}
-		this.addons.addAll(new AddonLoader(this).load(this.getDataFolder()
-				+ File.separator + "addons"));
 	}
 
 	public void rehook() {
@@ -180,54 +164,40 @@ public final class ColoredGroups extends JavaPlugin {
 		return this.profiles;
 	}
 
-	public List<Addon> getAddons() {
-		return this.addons;
+	public YamlConfig getConfiguration() {
+		return this.conf;
 	}
 
 	public static ColoredGroups getPlugin() {
 		return ColoredGroups.instance;
 	}
-
-	public List<ChatColor> getColors() {
-		return Arrays.asList(ChatColor.values());
+	
+	public BackupManager getBackupManager() {
+		return this.backup;
 	}
 
-	public void createTempChatProfile(final String group,
-			final String showngroup, final String prefix, final String suffix,
-			final String muffix, final String format) {
+	public boolean isGroup(String group) {
+		for (ChatProfile c : this.getChatProfiles()) {
+			if (c.getGroup().equalsIgnoreCase(group)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void createTempChatProfile(String group, String showngroup,
+			String prefix, String suffix, String muffix, String format) {
 		profiles.add(new ChatProfile(group, showngroup, prefix, suffix, muffix,
 				format));
 	}
 
-	public void createChatProfile(final String group, final String prefix,
-			final String suffix, final String muffix, final String format) {
-		this.conf.createNewGroup(group, prefix, suffix, muffix, format);
+	public void createChatProfile(String group, String prefix, String suffix,
+			String muffix, String format, String shown) {
+		this.conf.createNewGroup(group, prefix, suffix, muffix, format, shown);
 	}
 
-	public void deleteTempChatProfile(final String group) {
-		synchronized (this.profiles) {
-			Iterator<ChatProfile> it = this.profiles.iterator();
-			while (it.hasNext()) {
-				if (it.next().getGroup().equalsIgnoreCase(group)) {
-					it.remove();
-				}
-			}
-		}
-	}
-
-	public void deleteChatProfile(final String group) {
-		this.conf.deleteGroup(group);
-		synchronized (this.profiles) {
-			Iterator<ChatProfile> it = this.profiles.iterator();
-			while (it.hasNext()) {
-				if (it.next().getGroup().equalsIgnoreCase(group)) {
-					it.remove();
-				}
-			}
-		}
-	}
-	
-	public void modifyChatProfile(final String group, Map<String, String> modifiers) {
+	public void modifyChatProfile(final String group,
+			Map<String, String> modifiers) {
 		this.conf.modifyGroup(group, modifiers);
 	}
 }
