@@ -2,8 +2,6 @@ package net.milkycraft;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -17,7 +15,7 @@ public abstract class YamlLoader {
 	protected ColoredGroups plugin;
 	protected FileConfiguration config;
 
-	public YamlLoader(final ColoredGroups plugin, final String fileName) {
+	protected YamlLoader(final ColoredGroups plugin, final String fileName) {
 		this.plugin = plugin;
 		this.fileName = fileName;
 		this.dataFolder = plugin.getDataFolder();
@@ -25,7 +23,7 @@ public abstract class YamlLoader {
 		config = YamlConfiguration.loadConfiguration(this.configFile);
 	}
 
-	public void load() {
+	protected void load() {
 		if (!this.configFile.exists()) {
 			this.dataFolder.mkdir();
 			saveConfig();
@@ -81,7 +79,6 @@ public abstract class YamlLoader {
 		keys.set("ShownGroup", shownGroup);
 		keys.set("Format", format);
 		this.saveConfig();
-		plugin.reload();
 	}
 
 	/**
@@ -99,27 +96,10 @@ public abstract class YamlLoader {
 			throw new NullPointerException("Group does not exist");
 		}
 		this.saveConfig();
-		plugin.reload();
 	}
 
-	/**
-	 * 
-	 * @param group
-	 * @param modifiers
-	 */
-	protected void modifyGroup(final String group,
-			final Map<String, String> modifiers) {
-		ConfigurationSection groups = config.getConfigurationSection("groups");
-		if (!groups.contains(group)) {
-			throw new NullPointerException(
-					"Cannot modify unknown group in config!");
-		}
-		ConfigurationSection keys = groups.getConfigurationSection(group);
-		for (Entry<String, String> entry : modifiers.entrySet()) {
-			keys.set(entry.getKey(), entry.getValue());
-		}
-		this.saveConfig();
-		plugin.reload();
+	protected FileConfiguration getYaml() {
+		return this.config;
 	}
 
 	/**
