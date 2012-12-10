@@ -2,7 +2,7 @@ name: ColoredGroups
 author: milkywayz 
 main: net.milkycraft.ColoredGroups
 website: http://milkycraft.net
-version: 1.3
+version: 1.5.1
 
 commands:
     coloredgroups:
