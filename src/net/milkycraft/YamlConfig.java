@@ -4,7 +4,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public final class YamlConfig extends YamlLoader {
 
-	public boolean debug, igs, backup;
+	public boolean debug, igs, backup, importer, cchat, override;
 
 	public YamlConfig(ColoredGroups plugin, String fileName) {
 		super(plugin, fileName);
@@ -13,11 +13,16 @@ public final class YamlConfig extends YamlLoader {
 
 	@Override
 	protected void loadKeys() {
-		update();
-		this.debug = super.config.getBoolean("options.debug");
-		this.igs = super.config.getBoolean("options.in-game-set");
-		this.backup = super.config.getBoolean("options.backup-on-disable");
-		ConfigurationSection groups = config.getConfigurationSection("groups");
+		this.update();
+		this.debug = super.getYaml().getBoolean("options.debug", false);
+		this.igs = super.getYaml().getBoolean("options.in-game-set", true);
+		this.backup = super.getYaml().getBoolean("options.backup-on-disable",
+				true);
+		this.cchat = super.getYaml().getBoolean("options.allow-color-codes");
+		this.importer = super.getYaml().getBoolean("options.import", false);
+		this.override = super.getYaml().getBoolean("options.override", false);
+		ConfigurationSection groups = getYaml().getConfigurationSection(
+				"groups");
 		for (String keys : groups.getKeys(false)) {
 			ConfigurationSection vars = groups.getConfigurationSection(keys);
 			if (vars.getString("ShownGroup") == null) {
@@ -35,16 +40,40 @@ public final class YamlConfig extends YamlLoader {
 	protected void reload() {
 		super.rereadFromDisk();
 		super.load();
-		super.plugin.log("Variables reloaded from disk!");
 	}
 
 	protected void update() {
-		if (config.get("options.debug") == null) {
-			ConfigurationSection options = config.createSection("options");
-			options.set("debug", false);
-			options.set("in-game-set", true);
-			options.set("backup-on-disable", true);
-			saveConfig();
+		ConfigurationSection options = super.getYaml().getConfigurationSection(
+				"options");
+		if (options != null) {
+			if (options.get("debug") == null) {
+				this.set("options", "debug", false);
+			}
+			if (options.get("import") == null) {
+				this.set("options", "import", false);
+			}
+			if (options.get("in-game-set") == null) {
+				this.set("options", "in-game-set", true);
+			}
+			if (options.get("backup-on-disable") == null) {
+				this.set("options", "backup-on-disable", true);
+			}
+			if (options.get("allow-color-codes") == null) {
+				this.set("options", "allow-color-codes", false);
+			}
+			if (options.get("override") == null) {
+				this.set("options", "override", false);
+			}
+		} else {
+			super.getYaml().createSection("options");
+			super.saveConfig();
+			update();
 		}
+		super.saveConfig();
+	}
+
+	protected void set(String section, String key, Object value) {
+		super.getYaml().getConfigurationSection(section).set(key, value);
+		super.saveConfig();
 	}
 }
