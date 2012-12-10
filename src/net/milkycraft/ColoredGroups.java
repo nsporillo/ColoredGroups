@@ -1,5 +1,6 @@
 package net.milkycraft;
 
+import static de.bananaco.bpermissions.api.ApiLayer.getGroups;
 import static org.bukkit.ChatColor.RED;
 
 import java.util.ArrayList;
@@ -20,7 +21,6 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
-import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.imp.Permissions;
 
@@ -53,7 +53,7 @@ public final class ColoredGroups extends JavaPlugin {
 	public void onDisable() {
 		this.profiles.clear();
 		if (this.getConfiguration().backup) {
-			this.getBackupManager().create();
+			this.getBackupManager().create(50);
 		}
 	}
 
@@ -217,7 +217,7 @@ public final class ColoredGroups extends JavaPlugin {
 		} else if (this.pb != null) {
 			return this.pb.getGroups(name).get(0).getName();
 		} else if (this.bp != null) {
-			String[] groups = ApiLayer.getGroups(player.getWorld().getName(),
+			String[] groups = getGroups(player.getWorld().getName(),
 					CalculableType.USER, name);
 			return groups[0];
 		}
