@@ -8,6 +8,9 @@
 # You can add spaces if you want, ex: [+g] %p: %m
 # Want a color and a display modifier? Use 'color+modifier' Ex: '&4&n'
 # If you want the ability to use /cg set in game allow 'in-game-set'
+# If you want ColoredGroups to use vault to import groups, set import to true!
+# Set allow-color-codes to true to allow everyone to use color codes in chat
+# If set to false, requires 'coloredgroups.coloredchat' to use color codes in chat
 groups:
   Default:
     Prefix: '&2'
@@ -35,7 +38,10 @@ groups:
     ShownGroup: 'Owner'
 options:
   debug: false
+  import: false
   in-game-set: true
   backup-on-disable: true
+  allow-color-codes: false
+  override: false
   
   
