@@ -1,6 +1,7 @@
 package net.milkycraft;
 
-import org.bukkit.ChatColor;
+import static org.bukkit.ChatColor.WHITE;
+import static org.bukkit.ChatColor.translateAlternateColorCodes;
 
 public final class ChatProfile {
 
@@ -21,52 +22,150 @@ public final class ChatProfile {
 		this.format(format2);
 	}
 
+	/**
+	 * Gets the prefix
+	 * 
+	 * @return
+	 */
 	public String getPrefix() {
 		return this.prefix;
 	}
 
+	/**
+	 * Gets the suffix
+	 * 
+	 * @return
+	 */
 	public String getSuffix() {
 		return this.suffix;
 	}
 
+	/**
+	 * Gets the muffix
+	 * 
+	 * @return
+	 */
 	public String getMuffix() {
 		return this.muffix;
 	}
 
+	/**
+	 * Gets the shown group
+	 * 
+	 * @return
+	 */
 	public String getShownGroup() {
 		return this.showngroup;
 	}
 
+	/**
+	 * Gets an example of the profile in chat
+	 * 
+	 * @return
+	 */
 	public String getExample() {
 		return this.format.replace("%1$s", "player").replace("%2$s", "message");
 	}
 
+	/**
+	 * <p>
+	 * Get the Colored format
+	 * </p>
+	 * <p>
+	 * Following code will break
+	 * </p>
+	 * <code> getFormat("Example %") </code>
+	 * <p>
+	 * Cannot correct parse %'s in message
+	 * <p>
+	 * 
+	 * @param message
+	 * @return
+	 */
+	public String getFormat(String message) {
+		return this.format.replace("%2$s",
+				translateAlternateColorCodes('&', message));
+	}
+
+	/**
+	 * <p>
+	 * Get the non-colored-coded format</a>
+	 * <p>
+	 * Can handle all(?) text
+	 * </p>
+	 * 
+	 * @return
+	 */
 	public String getFormat() {
 		return this.format;
 	}
 
+	/**
+	 * <p>
+	 * Gets the group
+	 * </p>
+	 * <b>Group is matched with a persons permission group<b>
+	 * 
+	 * @return ChatProfiles's constant group
+	 */
 	public String getGroup() {
 		return this.group;
 	}
 
+	/**
+	 * <p>
+	 * Set the prefix
+	 * </p>
+	 * <p>
+	 * Uses '&' to denote color
+	 * </p>
+	 * 
+	 * @param newprefix
+	 */
 	public void setPrefix(String newprefix) {
-		this.prefix = ChatColor.translateAlternateColorCodes('&', newprefix);
+		this.prefix = translateAlternateColorCodes('&', newprefix);
 	}
 
+	/**
+	 * <p>
+	 * Set the suffix
+	 * </p>
+	 * <p>
+	 * Uses '&' to denote color
+	 * </p>
+	 * 
+	 * @param newsuffix
+	 */
 	public void setSuffix(String newsuffix) {
-		this.suffix = ChatColor.translateAlternateColorCodes('&', newsuffix);
+		this.suffix = translateAlternateColorCodes('&', newsuffix);
 	}
 
+	/**
+	 * <p>
+	 * Set the message color
+	 * </p>
+	 * <p>
+	 * Uses '&' to denote color
+	 * </p>
+	 * 
+	 * @param newmuffix
+	 */
 	public void setMuffix(String newmuffix) {
-		this.muffix = ChatColor.translateAlternateColorCodes('&', newmuffix);
+		this.muffix = translateAlternateColorCodes('&', newmuffix);
 	}
 
-	public void setName(String newname) {
-		this.showngroup = newname;
-	}
-
-	private void setShownGroup(String newgroup) {
-		this.showngroup = ChatColor.translateAlternateColorCodes('&', newgroup);
+	/**
+	 * <p>
+	 * Sets the group name in chat
+	 * </p>
+	 * <p>
+	 * Doesn't affect group matching in permissions layer
+	 * <p>
+	 * 
+	 * @param newgroup
+	 */
+	public void setShownGroup(String newgroup) {
+		this.showngroup = translateAlternateColorCodes('&', newgroup);
 	}
 
 	private void format(String mat) {
@@ -75,6 +174,6 @@ public final class ChatProfile {
 						getPrefix() + mat.substring(0, 1) + getShownGroup())
 				.replace("%p", getSuffix() + "%1$s")
 				.replace("%m", getMuffix() + "%2$s")
-				.replace("null", ChatColor.WHITE.toString());
+				.replace("null", WHITE.toString());
 	}
 }
