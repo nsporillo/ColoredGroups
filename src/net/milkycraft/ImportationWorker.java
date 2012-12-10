@@ -3,7 +3,7 @@ package net.milkycraft;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 
-import org.apache.commons.lang.WordUtils;
+import static org.apache.commons.lang.WordUtils.capitalize;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -56,10 +56,10 @@ public class ImportationWorker {
 		if (perms != null && chat != null) {
 			this.cleanse();
 			for (String group : perms.getGroups()) {
-				cg.getConfiguration().createNewGroup(cap(group),
+				cg.getConfiguration().createNewGroup(capitalize(group),
 						chat.getGroupPrefix(world, group),
 						chat.getGroupSuffix(world, group), "&f", "[%g]%p: %m",
-						cap(group));
+						capitalize(group));
 				cg.debug("Imported " + group);
 			}
 			cg.getConfiguration().set("options", "import", false);
@@ -67,9 +67,5 @@ public class ImportationWorker {
 			cg.warn("Vault was not found, import could not be done");
 			cg.getConfiguration().set("options", "import", false);
 		}
-	}
-
-	private String cap(String input) {
-		return WordUtils.capitalize(input);
 	}
 }
