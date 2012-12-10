@@ -13,7 +13,7 @@ public class BackupManager {
 	private ColoredGroups cg;
 	private Random r = new Random();
 
-	public BackupManager(ColoredGroups cg) {
+	protected BackupManager(ColoredGroups cg) {
 		this.cg = cg;
 		this.original = new File(cg.getDataFolder(), File.separator
 				+ "config.yml");
@@ -21,8 +21,12 @@ public class BackupManager {
 				+ "backups" + File.separator);
 	}
 
-	public void create() {
-		int i = r.nextInt(50);
+	/**
+	 * Create a config backup
+	 * @param bounds what the Random next int uses 
+	 */
+	public void create(int bounds) {
+		int i = r.nextInt(bounds);
 		if (!this.backupdir.exists()) {
 			this.backupdir.mkdir();
 		}
@@ -35,6 +39,9 @@ public class BackupManager {
 		}
 	}
 
+	/**
+	 * Purges backup directory
+	 */
 	public void purge() {
 		for (File f : this.backupdir.listFiles()) {
 			f.delete();
