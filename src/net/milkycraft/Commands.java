@@ -76,7 +76,7 @@ public final class Commands implements CommandExecutor {
 			}
 		} else if (args[0].equalsIgnoreCase("backup")) {
 			if (sender.hasPermission("coloredgroups.backup")) {
-				this.cg.getBackupManager().create();
+				this.cg.getBackupManager().create(50);
 				sender.sendMessage(GREEN
 						+ "Created a backup of the current config");
 			} else {
