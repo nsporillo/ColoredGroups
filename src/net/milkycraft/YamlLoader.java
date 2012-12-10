@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import static org.bukkit.configuration.file.YamlConfiguration.loadConfiguration;
 
 public abstract class YamlLoader {
 
@@ -20,7 +20,7 @@ public abstract class YamlLoader {
 		this.fileName = fileName;
 		this.dataFolder = plugin.getDataFolder();
 		this.configFile = new File(this.dataFolder, File.separator + fileName);
-		config = YamlConfiguration.loadConfiguration(this.configFile);
+		config = loadConfiguration(this.configFile);
 	}
 
 	protected void load() {
@@ -50,7 +50,7 @@ public abstract class YamlLoader {
 	}
 
 	protected void rereadFromDisk() {
-		config = YamlConfiguration.loadConfiguration(this.configFile);
+		config = loadConfiguration(this.configFile);
 	}
 
 	/**
