@@ -14,7 +14,7 @@ public class ChatHandler implements Listener {
 		this.cg = cg;
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onChat(AsyncPlayerChatEvent e) {
 		final String group = cg.getGroup(e.getPlayer());
 		for (ChatProfile c : cg.getChatProfiles()) {
