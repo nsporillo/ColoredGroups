@@ -1,6 +1,8 @@
 package net.milkycraft;
 
 import static de.bananaco.bpermissions.api.ApiLayer.getGroups;
+import static org.bukkit.Bukkit.getPluginManager;
+import static org.bukkit.Bukkit.getScheduler;
 import static org.bukkit.ChatColor.RED;
 
 import java.util.ArrayList;
@@ -9,7 +11,6 @@ import java.util.List;
 import net.krinsoft.privileges.Privileges;
 
 import org.anjocaido.groupmanager.GroupManager;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.Plugin;
@@ -42,7 +43,7 @@ public final class ColoredGroups extends JavaPlugin {
 		this.conf = new YamlConfig(this, "config.yml");
 		this.conf.load();
 		this.afterEnable();
-		Bukkit.getPluginManager().registerEvents(new ChatHandler(this), this);
+		getPluginManager().registerEvents(new ChatHandler(this), this);
 		this.getCommand("coloredgroups").setExecutor(new Commands(this));
 		this.backup = new BackupManager(this);
 		this.importer = new ImportationWorker(this);
@@ -58,7 +59,7 @@ public final class ColoredGroups extends JavaPlugin {
 	}
 
 	private void afterEnable() {
-		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+		getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
 			@Override
 			public void run() {
 				hook();
