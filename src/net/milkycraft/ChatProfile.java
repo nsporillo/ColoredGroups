@@ -83,8 +83,11 @@ public final class ChatProfile {
 	 * @return
 	 */
 	public String getFormat(String message) {
-		return this.format.replace("%2$s",
-				translateAlternateColorCodes('&', message));
+		if (message.contains("&")) {
+			return this.format.replace("%2$s",
+					translateAlternateColorCodes('&', message));
+		}
+		return this.format;
 	}
 
 	/**
