@@ -102,17 +102,11 @@ public abstract class YamlLoader {
 		return this.config;
 	}
 
-	/**
-	 * Add the defaults to this config file.
-	 */
 	protected void addDefaults() {
 		config.options().copyDefaults(true);
 		saveConfig();
 	}
 
-	/**
-	 * Load the keys from this config file.
-	 */
 	protected abstract void loadKeys();
 
 }

@@ -25,9 +25,10 @@ import com.platymuus.bukkit.permissions.PermissionsPlugin;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.imp.Permissions;
 
+@SuppressWarnings("deprecation")
 public final class ColoredGroups extends JavaPlugin {
 
-	private List<ChatProfile> profiles;
+	private List<ChatProfile> profiles = new ArrayList<ChatProfile>();
 	private ImportationWorker importer;
 	private BackupManager backup;
 	private YamlConfig conf;
@@ -39,9 +40,7 @@ public final class ColoredGroups extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		this.profiles = new ArrayList<ChatProfile>();
 		this.conf = new YamlConfig(this, "config.yml");
-		this.conf.load();
 		this.afterEnable();
 		getPluginManager().registerEvents(new ChatHandler(this), this);
 		this.getCommand("coloredgroups").setExecutor(new Commands(this));
@@ -78,7 +77,7 @@ public final class ColoredGroups extends JavaPlugin {
 				}
 				AsyncPlayerChatEvent.getHandlerList().unregister(
 						rl.getListener());
-				this.log("Overrided " + rl.getPlugin().getName()
+				this.warn("Overrided " + rl.getPlugin().getName()
 						+ "'s chat listening");
 			}
 		}
@@ -203,7 +202,6 @@ public final class ColoredGroups extends JavaPlugin {
 	 * @param player
 	 * @return
 	 */
-	@SuppressWarnings("deprecation")
 	public String getGroup(final Player player) {
 		final String name = player.getName();
 		if (this.priv != null) {
@@ -256,7 +254,7 @@ public final class ColoredGroups extends JavaPlugin {
 	}
 
 	/**
-	 * 
+	 * Gets the chat profile list
 	 * @return
 	 */
 	public List<ChatProfile> getChatProfiles() {

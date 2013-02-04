@@ -9,6 +9,7 @@ public final class YamlConfig extends YamlLoader {
 	public YamlConfig(ColoredGroups plugin, String fileName) {
 		super(plugin, fileName);
 		super.saveIfNotExist();
+		super.load();
 	}
 
 	@Override
