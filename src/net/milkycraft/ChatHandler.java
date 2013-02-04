@@ -17,19 +17,23 @@ public class ChatHandler implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onChat(AsyncPlayerChatEvent e) {
 		final String group = cg.getGroup(e.getPlayer());
-		for (ChatProfile c : cg.getChatProfiles()) {
-			if (c.getGroup().equalsIgnoreCase(group) && e.getPlayer() != null) {
-				if (canColorize(e.getPlayer())) {
-					if (e.getMessage().contains("%")) {
-						// Colorizing message which contains % will cause errors
-						e.setFormat(c.getFormat());
+		synchronized (this) {
+			for (ChatProfile c : cg.getChatProfiles()) {
+				if (c.getGroup().equalsIgnoreCase(group)
+						&& e.getPlayer() != null) {
+					if (canColorize(e.getPlayer())) {
+						if (e.getMessage().contains("%")) {
+							// Colorizing message which contains % will cause
+							// errors
+							e.setFormat(c.getFormat());
+							return;
+						}
+						e.setFormat(c.getFormat(e.getMessage()));
 						return;
 					}
-					e.setFormat(c.getFormat(e.getMessage()));
+					e.setFormat(c.getFormat());
 					return;
 				}
-				e.setFormat(c.getFormat());
-				return;
 			}
 		}
 		if (e.getFormat().equals("<%1$s> %2$s")) {
