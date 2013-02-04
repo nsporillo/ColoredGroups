@@ -23,7 +23,7 @@ groups:
     Suffix: '&d'
     Muffix: '&f'
     Format: '[%g]%p: %m'
-    ShownGroup: 'Moderator'
+    ShownGroup: 'Moderator][&7BOSS&5'
   Admin:
     Prefix: '&c'
     Suffix: '&e'
