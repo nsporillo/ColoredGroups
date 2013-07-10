@@ -29,12 +29,17 @@ public final class YamlConfig extends YamlLoader {
 			if (vars.getString("ShownGroup") == null) {
 				vars.set("ShownGroup", vars.getName());
 				super.saveConfig();
+			} 
+			if (vars.getString("TagColor") == null) {
+				vars.set("TagColor", "&f");
+				super.plugin.log("Updated " + vars.getName() + " for TagColor");
+				super.saveConfig();
 			}
 			super.plugin.getChatProfiles().add(
 					new ChatProfile(vars.getName(), vars
 							.getString("ShownGroup"), vars.getString("Prefix"),
 							vars.getString("Suffix"), vars.getString("Muffix"),
-							vars.getString("Format")));
+							vars.getString("Format"), vars.getString("TagColor")));
 		}
 	}
 
