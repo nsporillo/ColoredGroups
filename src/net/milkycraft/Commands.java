@@ -59,10 +59,11 @@ public final class Commands implements CommandExecutor {
 					sender.sendMessage(pre + RED
 							+ "You dont have permission to reload");
 				}
-			} else if (args[1].equalsIgnoreCase("addons")) {
+			} else if (args[1].equalsIgnoreCase("tags")) {
 				if (sender.hasPermission("coloredgroups.reload")) {
 					sender.sendMessage(pre + GREEN
-							+ "Addons have been removed from ColoredGroups");
+							+ "Reloaded Tags");
+					cg.retag();
 				} else {
 					sender.sendMessage(pre + RED
 							+ "You dont have permission to reload");
