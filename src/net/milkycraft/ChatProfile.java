@@ -3,6 +3,8 @@ package net.milkycraft;
 import static org.bukkit.ChatColor.WHITE;
 import static org.bukkit.ChatColor.translateAlternateColorCodes;
 
+import org.bukkit.ChatColor;
+
 public final class ChatProfile {
 
 	private final String group;
@@ -11,10 +13,12 @@ public final class ChatProfile {
 	private String suffix;
 	private String muffix;
 	private String format;
+	private ChatColor tagColor;
 
 	protected ChatProfile(String g, String sg, String prefix2, String suffix2,
-			String muffix2, String format2) {
+			String muffix2, String format2, String color) {
 		this.group = g;
+		this.tagColor = ChatColor.getByChar(color.replace("&", ""));
 		this.setShownGroup(sg);
 		this.setPrefix(prefix2);
 		this.setSuffix(suffix2);
@@ -30,6 +34,12 @@ public final class ChatProfile {
 	public String getPrefix() {
 		return this.prefix;
 	}
+	
+	
+	public ChatColor getTagColor() {
+		return tagColor;
+	}
+	
 
 	/**
 	 * Gets the suffix
@@ -174,7 +184,7 @@ public final class ChatProfile {
 	private void format(String mat) {
 		this.format = mat
 				.replace(mat.substring(0, 1) + "%g",
-						getPrefix() + mat.substring(0, 1) + getShownGroup())
+						getPrefix() + mat.substring(0, 1) + showngroup)
 				.replace("%p", getSuffix() + "%1$s")
 				.replace("%m", getMuffix() + "%2$s")
 				.replace("null", WHITE.toString());
