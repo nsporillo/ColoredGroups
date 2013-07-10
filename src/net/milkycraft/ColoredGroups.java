@@ -11,11 +11,13 @@ import java.util.List;
 import net.krinsoft.privileges.Privileges;
 
 import org.anjocaido.groupmanager.GroupManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.kitteh.tag.TagAPI;
 
 import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
@@ -26,7 +28,7 @@ import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.imp.Permissions;
 
 @SuppressWarnings("deprecation")
-public final class ColoredGroups extends JavaPlugin {
+public class ColoredGroups extends JavaPlugin {
 
 	private List<ChatProfile> profiles = new ArrayList<ChatProfile>();
 	private ImportationWorker importer;
@@ -43,6 +45,9 @@ public final class ColoredGroups extends JavaPlugin {
 		this.conf = new YamlConfig(this, "config.yml");
 		this.afterEnable();
 		getPluginManager().registerEvents(new ChatHandler(this), this);
+		if (getPluginManager().getPlugin("TagAPI") != null) {
+			getPluginManager().registerEvents(new TagListener(this), this);
+		}
 		this.getCommand("coloredgroups").setExecutor(new Commands(this));
 		this.backup = new BackupManager(this);
 		this.importer = new ImportationWorker(this);
@@ -67,29 +72,25 @@ public final class ColoredGroups extends JavaPlugin {
 		}, 1L);
 	}
 
-	private void ride_() {
+	void ride_() {
 		if (this.getConfiguration().override) {
 			for (RegisteredListener rl : AsyncPlayerChatEvent.getHandlerList()
 					.getRegisteredListeners()) {
-				if (rl.getListener().getClass().getSimpleName()
-						.equals("ChatHandler")) {
+				if (rl.getListener().getClass().getSimpleName().equals("ChatHandler")) {
 					continue;
 				}
-				AsyncPlayerChatEvent.getHandlerList().unregister(
-						rl.getListener());
-				this.warn("Overrided " + rl.getPlugin().getName()
-						+ "'s chat listening");
+				AsyncPlayerChatEvent.getHandlerList().unregister(rl.getListener());
+				this.warn("Overrided " + rl.getPlugin().getName() + "'s chat listening");
 			}
 		}
 	}
 
-	private void hook() {
+	void hook() {
 		Plugin pri = getServer().getPluginManager().getPlugin("Privileges");
 		Plugin pex = getServer().getPluginManager().getPlugin("PermissionsEx");
 		Plugin gm = getServer().getPluginManager().getPlugin("GroupManager");
 		Plugin bp = getServer().getPluginManager().getPlugin("bPermissions");
-		Plugin pb = getServer().getPluginManager().getPlugin(
-				"PermissionsBukkit");
+		Plugin pb = getServer().getPluginManager().getPlugin("PermissionsBukkit");
 		if (pri != null && pri.isEnabled()) {
 			this.priv = (Privileges) pri;
 			this.log(priv);
@@ -116,65 +117,33 @@ public final class ColoredGroups extends JavaPlugin {
 	}
 
 	private void log(Plugin p) {
-		this.log("Hooked " + p.getDescription().getName() + " v"
-				+ p.getDescription().getVersion() + " by "
-				+ p.getDescription().getAuthors().get(0));
+		this.log("Hooked " + p.getDescription().getName() + " v" + p.getDescription().getVersion()
+				+ " by " + p.getDescription().getAuthors().get(0));
 	}
 
-	/**
-	 * Logs information to console
-	 * 
-	 * @param log
-	 */
 	public void log(String log) {
 		this.getLogger().info(log);
 	}
 
-	/**
-	 * Sends a debug message if debugging enabled
-	 * 
-	 * @param debug
-	 */
 	public void debug(String debug) {
 		if (this.getConfiguration().debug) {
 			this.getLogger().info("[Debug] " + debug);
 		}
 	}
 
-	/**
-	 * <p>
-	 * Runs a import
-	 * </p>
-	 * <p>
-	 * If override is true then run will disregard config
-	 * </p>
-	 * 
-	 * @param override
-	 */
 	public void runImport(boolean override) {
 		this.importer.run(override);
 	}
 
-	/**
-	 * Display warning to console
-	 * 
-	 * @param string
-	 */
 	public void warn(String string) {
 		this.getLogger().warning(string);
 	}
 
-	/**
-	 * Clear profiles and reload from config
-	 */
 	public void reload() {
 		this.profiles.clear();
 		this.conf.reload();
 	}
 
-	/**
-	 * Unhooks from plugins then hook again
-	 */
 	public void rehook() {
 		this.unhook();
 		this.hook();
@@ -189,46 +158,30 @@ public final class ColoredGroups extends JavaPlugin {
 		this.log("Unhooked from permissions plugins");
 	}
 
-	/**
-	 * <p>
-	 * Gets players group from permissions
-	 * <p>
-	 * <p>
-	 * Called alot! However caching would probably cause more issues then not,
-	 * since chat executing is in another thread and this check is fairly fast
-	 * depending on the perms system used
-	 * </p>
-	 * 
-	 * @param player
-	 * @return
-	 */
-	public String getGroup(final Player player) {
-		final String name = player.getName();
+	public String getGroup(final Player p) {
+		final String name = p.getName();
 		if (this.priv != null) {
-			return this.priv.getGroupManager().getGroup(player).getName();
+			return this.priv.getGroupManager().getGroup(p).getName();
 		} else if (this.pex != null) {
-			PermissionGroup[] groups = PermissionsEx.getUser(player).getGroups(
-					player.getWorld().getName());
+			PermissionGroup[] groups = PermissionsEx.getUser(p).getGroups(p.getWorld().getName());
 			return groups[0].getName();
 		} else if (this.gm != null) {
-			return this.gm.getWorldsHolder().getWorldPermissions(player)
-					.getGroup(name);
+			return this.gm.getWorldsHolder().getWorldPermissions(p).getGroup(name);
 		} else if (this.pb != null) {
 			return this.pb.getGroups(name).get(0).getName();
 		} else if (this.bp != null) {
-			String[] groups = getGroups(player.getWorld().getName(),
-					CalculableType.USER, name);
+			String[] groups = getGroups(p.getWorld().getName(), CalculableType.USER, name);
 			return groups[0];
 		}
 		return "Unknown";
 	}
 
-	/**
-	 * Gets a test message for a group
-	 * 
-	 * @param group
-	 * @return Example of group chatting
-	 */
+	public void retag() {
+		for (Player p : Bukkit.getOnlinePlayers()) {
+			TagAPI.refreshPlayer(p);
+		}
+	}
+
 	public String getTestMessage(String group) {
 		for (ChatProfile c : this.profiles) {
 			if (c.getGroup().equalsIgnoreCase(group)) {
@@ -238,12 +191,6 @@ public final class ColoredGroups extends JavaPlugin {
 		return RED + "No groups match that name";
 	}
 
-	/**
-	 * Checks if string represents a valid group
-	 * 
-	 * @param group
-	 * @return true if is valid, false if not valid
-	 */
 	public boolean isGroup(String group) {
 		for (ChatProfile c : this.getChatProfiles()) {
 			if (c.getGroup().equalsIgnoreCase(group)) {
@@ -253,28 +200,14 @@ public final class ColoredGroups extends JavaPlugin {
 		return false;
 	}
 
-	/**
-	 * Gets the chat profile list
-	 * @return
-	 */
 	public List<ChatProfile> getChatProfiles() {
-		return this.profiles;
+		return profiles;
 	}
 
-	/**
-	 * Gets the YamlConfig instance
-	 * 
-	 * @return ColoredGroups config
-	 */
 	public YamlConfig getConfiguration() {
 		return this.conf;
 	}
 
-	/**
-	 * Gets the backup manager
-	 * 
-	 * @return BackupManager instance
-	 */
 	public BackupManager getBackupManager() {
 		return this.backup;
 	}
