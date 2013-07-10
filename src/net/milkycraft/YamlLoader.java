@@ -37,6 +37,7 @@ public abstract class YamlLoader {
 		try {
 			config.save(this.configFile);
 		} catch (IOException ex) {
+			//fuk betches
 		}
 	}
 
@@ -78,6 +79,7 @@ public abstract class YamlLoader {
 		keys.set("Muffix", muffix);
 		keys.set("ShownGroup", shownGroup);
 		keys.set("Format", format);
+		keys.set("TagColor", "&f");
 		this.saveConfig();
 	}
 
