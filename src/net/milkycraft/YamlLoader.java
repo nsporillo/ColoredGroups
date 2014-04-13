@@ -37,7 +37,7 @@ public abstract class YamlLoader {
 		try {
 			config.save(this.configFile);
 		} catch (IOException ex) {
-			//fuk betches
+			ex.printStackTrace();
 		}
 	}
 
@@ -65,21 +65,20 @@ public abstract class YamlLoader {
 	 * @param muffix
 	 * @param format
 	 */
-	protected void createNewGroup(String group, String prefix, String suffix,
-			String muffix, String format, String shownGroup) {
+	protected void createNewGroup(String a, String b, String c, String d, String e,
+			String f) {
 		ConfigurationSection groups = config.getConfigurationSection("groups");
-		if (groups.contains(group)) {
+		if (groups.contains(a)) {
 			throw new UnsupportedOperationException(
 					"Cannot create duplicate group in config!");
 		}
-		groups.createSection(group);
-		ConfigurationSection keys = groups.getConfigurationSection(group);
-		keys.set("Prefix", prefix);
-		keys.set("Suffix", suffix);
-		keys.set("Muffix", muffix);
-		keys.set("ShownGroup", shownGroup);
-		keys.set("Format", format);
-		keys.set("TagColor", "&f");
+		groups.createSection(a);
+		ConfigurationSection keys = groups.getConfigurationSection(a);
+		keys.set("Prefix", b);
+		keys.set("Suffix", c);
+		keys.set("Muffix", d);
+		keys.set("ShownGroup", e);
+		keys.set("Format", f);
 		this.saveConfig();
 	}
 
@@ -108,7 +107,6 @@ public abstract class YamlLoader {
 		config.options().copyDefaults(true);
 		saveConfig();
 	}
-
+	
 	protected abstract void loadKeys();
-
 }
