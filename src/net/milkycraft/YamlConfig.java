@@ -1,6 +1,7 @@
 package net.milkycraft;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 
 public final class YamlConfig extends YamlLoader {
 
@@ -15,31 +16,29 @@ public final class YamlConfig extends YamlLoader {
 	@Override
 	protected void loadKeys() {
 		this.update();
-		this.debug = super.getYaml().getBoolean("options.debug", false);
-		this.igs = super.getYaml().getBoolean("options.in-game-set", true);
-		this.backup = super.getYaml().getBoolean("options.backup-on-disable",
-				true);
-		this.cchat = super.getYaml().getBoolean("options.allow-color-codes");
-		this.importer = super.getYaml().getBoolean("options.import", false);
-		this.override = super.getYaml().getBoolean("options.override", false);
-		ConfigurationSection groups = getYaml().getConfigurationSection(
-				"groups");
+		FileConfiguration yaml = super.getYaml();
+		this.debug = yaml.getBoolean("options.debug", false);
+		this.igs = yaml.getBoolean("options.in-game-set", true);
+		this.backup = yaml.getBoolean("options.backup-on-disable", true);
+		this.cchat = yaml.getBoolean("options.allow-color-codes");
+		this.importer = yaml.getBoolean("options.import", false);
+		this.override = yaml.getBoolean("options.override", false);
+		ConfigurationSection groups = yaml.getConfigurationSection("groups");
 		for (String keys : groups.getKeys(false)) {
 			ConfigurationSection vars = groups.getConfigurationSection(keys);
 			if (vars.getString("ShownGroup") == null) {
 				vars.set("ShownGroup", vars.getName());
 				super.saveConfig();
-			} 
-			if (vars.getString("TagColor") == null) {
-				vars.set("TagColor", "&f");
-				super.plugin.log("Updated " + vars.getName() + " for TagColor");
+			}
+			if (vars.getString("Color") == null) {
+				vars.set("Color", "&f");
 				super.saveConfig();
 			}
 			super.plugin.getChatProfiles().add(
-					new ChatProfile(vars.getName(), vars
-							.getString("ShownGroup"), vars.getString("Prefix"),
-							vars.getString("Suffix"), vars.getString("Muffix"),
-							vars.getString("Format"), vars.getString("TagColor")));
+					new ChatProfile(vars.getName(), vars.getString("ShownGroup"), vars
+							.getString("Prefix"), vars.getString("Suffix"), vars
+							.getString("Muffix"), vars.getString("Format"), vars
+							.getString("Color")));
 		}
 	}
 
@@ -49,8 +48,7 @@ public final class YamlConfig extends YamlLoader {
 	}
 
 	protected void update() {
-		ConfigurationSection options = super.getYaml().getConfigurationSection(
-				"options");
+		ConfigurationSection options = super.getYaml().getConfigurationSection("options");
 		if (options != null) {
 			if (options.get("debug") == null) {
 				this.set("options", "debug", false);
