@@ -1,4 +1,5 @@
 # ColoredGroups Configuration
+# To make a new group, simply follow YAML format and make a new group indented by 2 spaces, it's name corresponds to a users permissions group
 # Use Color codes to represent colors 
 # Prefix is group name, Suffix is player name, Muffix is message 
 # These groups should match those in your supported permissions plugin
