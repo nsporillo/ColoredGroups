@@ -1,6 +1,5 @@
 package net.milkycraft;
 
-import static de.bananaco.bpermissions.api.ApiLayer.getGroups;
 import static org.bukkit.Bukkit.getPluginManager;
 import static org.bukkit.Bukkit.getScheduler;
 import static org.bukkit.ChatColor.RED;
@@ -19,18 +18,17 @@ import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kitteh.tag.TagAPI;
 
-import ru.tehkode.permissions.PermissionGroup;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import com.platymuus.bukkit.permissions.PermissionsPlugin;
 
+import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.imp.Permissions;
 
-@SuppressWarnings("deprecation")
 public class ColoredGroups extends JavaPlugin {
 
-	private List<ChatProfile> profiles = new ArrayList<ChatProfile>();
+	private List<ChatProfile> profiles = new ArrayList<ChatProfile>(5);
 	private ImportationWorker importer;
 	private BackupManager backup;
 	private YamlConfig conf;
@@ -63,26 +61,22 @@ public class ColoredGroups extends JavaPlugin {
 	}
 
 	private void afterEnable() {
-		getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+		getScheduler().runTaskLater(this, new Runnable() {
 			@Override
 			public void run() {
 				hook();
-				ride_();
+				if (ColoredGroups.this.getConfiguration().override) {
+					for (RegisteredListener rl : AsyncPlayerChatEvent.getHandlerList()
+							.getRegisteredListeners()) {
+						if (rl.getListener().getClass().getSimpleName().equals("ChatHandler")) {
+							continue;
+						}
+						AsyncPlayerChatEvent.getHandlerList().unregister(rl.getListener());
+						ColoredGroups.this.warn("Overrided " + rl.getPlugin().getName() + "'s chat listening");
+					}
+				}
 			}
 		}, 1L);
-	}
-
-	void ride_() {
-		if (this.getConfiguration().override) {
-			for (RegisteredListener rl : AsyncPlayerChatEvent.getHandlerList()
-					.getRegisteredListeners()) {
-				if (rl.getListener().getClass().getSimpleName().equals("ChatHandler")) {
-					continue;
-				}
-				AsyncPlayerChatEvent.getHandlerList().unregister(rl.getListener());
-				this.warn("Overrided " + rl.getPlugin().getName() + "'s chat listening");
-			}
-		}
 	}
 
 	void hook() {
@@ -158,19 +152,21 @@ public class ColoredGroups extends JavaPlugin {
 		this.log("Unhooked from permissions plugins");
 	}
 
+	@SuppressWarnings("deprecation")
 	public String getGroup(final Player p) {
 		final String name = p.getName();
+		final String world = p.getWorld().getName();
 		if (this.priv != null) {
 			return this.priv.getGroupManager().getGroup(p).getName();
 		} else if (this.pex != null) {
-			PermissionGroup[] groups = PermissionsEx.getUser(p).getGroups(p.getWorld().getName());
-			return groups[0].getName();
+			List<String> g = PermissionsEx.getPermissionManager().getUser(p).getGroupNames(world);
+			return g.get(0);
 		} else if (this.gm != null) {
 			return this.gm.getWorldsHolder().getWorldPermissions(p).getGroup(name);
 		} else if (this.pb != null) {
 			return this.pb.getGroups(name).get(0).getName();
-		} else if (this.bp != null) {
-			String[] groups = getGroups(p.getWorld().getName(), CalculableType.USER, name);
+		} else if (this.bp != null) {			
+			String[] groups = ApiLayer.getGroups(world, CalculableType.USER, name);
 			return groups[0];
 		}
 		return "Unknown";
