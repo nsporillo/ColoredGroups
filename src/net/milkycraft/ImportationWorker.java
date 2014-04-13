@@ -23,7 +23,7 @@ public class ImportationWorker {
 		}
 	}
 
-	public Permission getPerms() {
+	private Permission getPerms() {
 		if (vault != null && vault.isEnabled()) {
 			RegisteredServiceProvider<Permission> rsp = cg.getServer()
 					.getServicesManager().getRegistration(Permission.class);
