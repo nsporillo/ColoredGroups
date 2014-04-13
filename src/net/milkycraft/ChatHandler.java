@@ -37,11 +37,7 @@ public class ChatHandler implements Listener {
 	}
 
 	private boolean canColorize(Player sender) {
-		if (cg.getConfiguration().cchat) {
-			return true;
-		}
-		return sender.hasPermission("coloredgroups.coloredchat");
+		return cg.getConfiguration().cchat ? true : sender
+				.hasPermission("coloredgroups.coloredchat");
 	}
-	
-	
 }
