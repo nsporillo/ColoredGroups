@@ -12,7 +12,7 @@ public class TagListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onPing(org.kitteh.tag.PlayerReceiveNameTagEvent e) {
+	public void onPing(org.kitteh.tag.AsyncPlayerReceiveNameTagEvent e) {
 		final Player p = e.getNamedPlayer();
 		final String group = cg.getGroup(p);
 		for (ChatProfile c : cg.getChatProfiles()) {
