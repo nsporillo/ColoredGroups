@@ -25,8 +25,8 @@ public class ImportationWorker {
 
 	private Permission getPerms() {
 		if (vault != null && vault.isEnabled()) {
-			RegisteredServiceProvider<Permission> rsp = cg.getServer()
-					.getServicesManager().getRegistration(Permission.class);
+			RegisteredServiceProvider<Permission> rsp = cg.getServer().getServicesManager()
+					.getRegistration(Permission.class);
 			return rsp.getProvider();
 		}
 		return null;
@@ -34,8 +34,8 @@ public class ImportationWorker {
 
 	private Chat getChat() {
 		if (vault != null && vault.isEnabled()) {
-			RegisteredServiceProvider<Chat> rsp = cg.getServer()
-					.getServicesManager().getRegistration(Chat.class);
+			RegisteredServiceProvider<Chat> rsp = cg.getServer().getServicesManager()
+					.getRegistration(Chat.class);
 			return rsp.getProvider();
 		}
 		return null;
@@ -46,9 +46,9 @@ public class ImportationWorker {
 	}
 
 	private void cleanse() {
-		for (String section : cg.getConfiguration().getYaml()
-				.getConfigurationSection("groups").getKeys(false)) {
-			cg.getConfiguration().deleteGroup(section);
+		YamlConfig conf = cg.getConfiguration();
+		for (String section : conf.getYaml().getConfigurationSection("groups").getKeys(false)) {
+			conf.deleteGroup(section);
 		}
 	}
 
@@ -57,9 +57,8 @@ public class ImportationWorker {
 			this.cleanse();
 			for (String group : perms.getGroups()) {
 				cg.getConfiguration().createNewGroup(capitalize(group),
-						chat.getGroupPrefix(world, group),
-						chat.getGroupSuffix(world, group), "&f", "[%g]%p: %m",
-						capitalize(group));
+						chat.getGroupPrefix(world, group), chat.getGroupSuffix(world, group), "&f",
+						"[%g]%p: %m", capitalize(group));
 				cg.debug("Imported " + group);
 			}
 			cg.getConfiguration().set("options", "import", false);

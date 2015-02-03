@@ -57,13 +57,12 @@ public abstract class YamlLoader {
 	/**
 	 * Api method to create a new config section for a group
 	 * 
-	 * @throws UnsupportedOperationException
-	 *             if group already exists in config
-	 * @param group
-	 * @param prefix
-	 * @param suffix
-	 * @param muffix
-	 * @param format
+	 * @param a Group Name
+	 * @param b Prefix
+	 * @param c Suffix
+	 * @param d Muffix
+	 * @param e ShownGroup
+	 * @param f Format
 	 */
 	protected void createNewGroup(String a, String b, String c, String d, String e,
 			String f) {
