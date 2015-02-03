@@ -26,6 +26,7 @@ import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.imp.Permissions;
 
+@SuppressWarnings("deprecation")
 public class ColoredGroups extends JavaPlugin {
 
 	private List<ChatProfile> profiles = new ArrayList<ChatProfile>(5);
@@ -152,15 +153,14 @@ public class ColoredGroups extends JavaPlugin {
 		this.log("Unhooked from permissions plugins");
 	}
 
-	@SuppressWarnings("deprecation")
 	public String getGroup(final Player p) {
 		final String name = p.getName();
 		final String world = p.getWorld().getName();
 		if (this.priv != null) {
 			return this.priv.getGroupManager().getGroup(p).getName();
 		} else if (this.pex != null) {
-			List<String> g = PermissionsEx.getPermissionManager().getUser(p).getGroupNames(world);
-			return g.get(0);
+			String[] g = PermissionsEx.getPermissionManager().getUser(p).getGroupsNames(world);
+			return g[0];
 		} else if (this.gm != null) {
 			return this.gm.getWorldsHolder().getWorldPermissions(p).getGroup(name);
 		} else if (this.pb != null) {
