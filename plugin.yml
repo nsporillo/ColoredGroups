@@ -1,7 +1,7 @@
 name: ColoredGroups
-author: milkywayz 
-main: net.milkycraft.ColoredGroups
-website: http://milkycraft.net
+author: Nick Porillo 
+main: net.porillo.ColoredGroups
+website: http://porillo.net
 version: 1.6.4
 commands:
   coloredgroups:
