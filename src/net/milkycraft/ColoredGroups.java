@@ -73,7 +73,7 @@ public class ColoredGroups extends JavaPlugin {
 							continue;
 						}
 						AsyncPlayerChatEvent.getHandlerList().unregister(rl.getListener());
-						ColoredGroups.this.warn("Overrided " + rl.getPlugin().getName() + "'s chat listening");
+						ColoredGroups.this.warn("Overrode " + rl.getPlugin().getName() + "'s chat listening");
 					}
 				}
 			}
