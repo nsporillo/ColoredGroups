@@ -1,4 +1,4 @@
-package net.milkycraft;
+package net.porillo;
 
 import static org.bukkit.Bukkit.getPluginManager;
 import static org.bukkit.Bukkit.getScheduler;

@@ -1,4 +1,4 @@
-package net.milkycraft;
+package net.porillo;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;

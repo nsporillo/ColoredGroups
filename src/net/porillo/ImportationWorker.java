@@ -1,4 +1,4 @@
-package net.milkycraft;
+package net.porillo;
 
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;

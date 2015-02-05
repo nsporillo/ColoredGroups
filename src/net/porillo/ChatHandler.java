@@ -1,4 +1,4 @@
-package net.milkycraft;
+package net.porillo;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

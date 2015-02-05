@@ -1,4 +1,4 @@
-package net.milkycraft;
+package net.porillo;
 
 import static org.bukkit.ChatColor.AQUA;
 import static org.bukkit.ChatColor.GOLD;
