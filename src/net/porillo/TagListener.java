@@ -7,29 +7,30 @@ import org.kitteh.tag.AsyncPlayerReceiveNameTagEvent;
 
 public class TagListener implements Listener {
 
-	private ColoredGroups cg;
-	public TagListener(ColoredGroups cg) {
-		this.cg = cg;
-	}
-	
-	@EventHandler
-	public void onPing(AsyncPlayerReceiveNameTagEvent e) {
-		final Player p = e.getNamedPlayer();
-		final String group = cg.getGroup(p);
-		for (ChatProfile c : cg.getChatProfiles()) {
-			if (c.getGroup().equalsIgnoreCase(group)) {
-				String tahg = c.getTagColor() + p.getDisplayName();
-				if (tahg.length() < 16) {
-					e.setTag(tahg);
-					return;
-				}			
-				String tag = c.getTagColor() + p.getName();
-				if (tag.length() < 16) {
-					e.setTag(tag);
-				} else {
-					e.setTag(c.getTagColor() + p.getName().substring(0, 14));
-				}
-			}
-		}
-	}
+    private ColoredGroups cg;
+
+    public TagListener(ColoredGroups cg) {
+        this.cg = cg;
+    }
+
+    @EventHandler
+    public void onPing(AsyncPlayerReceiveNameTagEvent e) {
+        final Player p = e.getNamedPlayer();
+        final String group = cg.getGroup(p);
+        for (ChatProfile c : cg.getChatProfiles()) {
+            if (c.getGroup().equalsIgnoreCase(group)) {
+                String tahg = c.getTagColor() + p.getDisplayName();
+                if (tahg.length() < 16) {
+                    e.setTag(tahg);
+                    return;
+                }
+                String tag = c.getTagColor() + p.getName();
+                if (tag.length() < 16) {
+                    e.setTag(tag);
+                } else {
+                    e.setTag(c.getTagColor() + p.getName().substring(0, 14));
+                }
+            }
+        }
+    }
 }

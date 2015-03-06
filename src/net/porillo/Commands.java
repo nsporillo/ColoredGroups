@@ -1,22 +1,17 @@
 package net.porillo;
 
-import static org.bukkit.ChatColor.AQUA;
-import static org.bukkit.ChatColor.GOLD;
-import static org.bukkit.ChatColor.GREEN;
-import static org.bukkit.ChatColor.RED;
-import static org.bukkit.ChatColor.WHITE;
-import static org.bukkit.ChatColor.YELLOW;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import static org.bukkit.ChatColor.*;
+
 public final class Commands implements CommandExecutor {
 
     private final String pre = AQUA + "[ColoredGroups] ";
-    private final String[] cmds = { "/cg help", "/cg test all", "/cg backup", "/cg import", "/cg test <group>", "/cg reload hooks", "/cg reload config", };
-    private final String[] helps = { "Help command for ColoredGroups", "Tests all groups chat msgs", "Backs up config", "Imports values from prev. plugin",
-            "Tests specific groups chat msgs", "Rehooks into permissions", "Reloads variables from config", };
+    private final String[] cmds = {"/cg help", "/cg test all", "/cg backup", "/cg import", "/cg test <group>", "/cg reload hooks", "/cg reload config",};
+    private final String[] helps = {"Help command for ColoredGroups", "Tests all groups chat msgs", "Backs up config", "Imports values from prev. plugin",
+            "Tests specific groups chat msgs", "Rehooks into permissions", "Reloads variables from config",};
     private ColoredGroups cg;
 
     protected Commands(final ColoredGroups cg1) {
