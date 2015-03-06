@@ -3,6 +3,7 @@ author: Nick Porillo
 main: net.porillo.ColoredGroups
 website: http://porillo.net
 version: 1.6.4
+depend: [vault]
 commands:
   coloredgroups:
     aliases: [cg, color]
