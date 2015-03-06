@@ -28,6 +28,7 @@ public class ColoredGroups extends JavaPlugin {
     @Override
     public void onEnable() {
         this.conf = new YamlConfig(this, "config.yml");
+        this.perms = getPerms();
         this.afterEnable();
         getPluginManager().registerEvents(new ChatHandler(this), this);
         if (getPluginManager().getPlugin("TagAPI") != null) {
@@ -55,7 +56,7 @@ public class ColoredGroups extends JavaPlugin {
                     .getRegistration(Permission.class);
             return rsp.getProvider();
         }
-        return null;
+        throw new RuntimeException("Vault not found");
     }
 
     private void afterEnable() {
@@ -110,7 +111,11 @@ public class ColoredGroups extends JavaPlugin {
     }
 
     public String getGroup(final Player p) {
-        return perms.getPrimaryGroup(p.getWorld().getName(), p);
+        return getGroup(p.getWorld().getName(), p.getName());
+    }
+    
+    public String getGroup(String world, String name) {
+       return perms.getPrimaryGroup(world, name);
     }
 
     public void retag() {
