@@ -37,6 +37,7 @@ public class ColoredGroups extends JavaPlugin {
         this.backup = new BackupManager(this);
         this.importer = new ImportationWorker(this);
         this.runImport(false);
+
     }
 
     @Override
@@ -71,14 +72,18 @@ public class ColoredGroups extends JavaPlugin {
                         ColoredGroups.this.warn("Overrode " + rl.getPlugin().getName() + "'s chat listening");
                     }
                 }
+                log();
             }
         }, 1L);
     }
 
 
-    private void log(Plugin p) {
-        this.log("Hooked " + p.getDescription().getName() + " v" + p.getDescription().getVersion()
-                + " by " + p.getDescription().getAuthors().get(0));
+    private void log() {
+        Plugin p = Bukkit.getPluginManager().getPlugin(perms.getName());
+        if (p != null && p.isEnabled()) {
+            this.log("Hooked " + p.getDescription().getName() + " v" + p.getDescription().getVersion()
+                    + " by " + p.getDescription().getAuthors().get(0));
+        }
     }
 
     public void log(String log) {

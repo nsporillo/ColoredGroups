@@ -30,6 +30,10 @@ public final class ChatProfile {
         return this.prefix;
     }
 
+    public void setPrefix(String newprefix) {
+        this.prefix = translateAlternateColorCodes('&', newprefix);
+    }
+
     public ChatColor getTagColor() {
         return tagColor;
     }
@@ -38,12 +42,24 @@ public final class ChatProfile {
         return this.suffix;
     }
 
+    public void setSuffix(String newsuffix) {
+        this.suffix = translateAlternateColorCodes('&', newsuffix);
+    }
+
     public String getMuffix() {
         return this.muffix;
     }
 
+    public void setMuffix(String newmuffix) {
+        this.muffix = translateAlternateColorCodes('&', newmuffix);
+    }
+
     public String getShownGroup() {
         return this.showngroup;
+    }
+
+    public void setShownGroup(String newgroup) {
+        this.showngroup = translateAlternateColorCodes('&', newgroup);
     }
 
     public String getExample() {
@@ -64,22 +80,6 @@ public final class ChatProfile {
 
     public String getGroup() {
         return this.group;
-    }
-
-    public void setPrefix(String newprefix) {
-        this.prefix = translateAlternateColorCodes('&', newprefix);
-    }
-
-    public void setSuffix(String newsuffix) {
-        this.suffix = translateAlternateColorCodes('&', newsuffix);
-    }
-
-    public void setMuffix(String newmuffix) {
-        this.muffix = translateAlternateColorCodes('&', newmuffix);
-    }
-
-    public void setShownGroup(String newgroup) {
-        this.showngroup = translateAlternateColorCodes('&', newgroup);
     }
 
     private void format(String mat) {

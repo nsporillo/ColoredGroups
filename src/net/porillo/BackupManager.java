@@ -13,7 +13,7 @@ public class BackupManager {
     private File backupdir;
     private ColoredGroups cg;
 
-    protected BackupManager(ColoredGroups cg) {
+    BackupManager(ColoredGroups cg) {
         this.cg = cg;
         this.backupdir = new File(cg.getDataFolder(), separator + "backups" + separator);
     }
