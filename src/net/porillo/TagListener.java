@@ -3,6 +3,7 @@ package net.porillo;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.kitteh.tag.AsyncPlayerReceiveNameTagEvent;
 
 public class TagListener implements Listener {
 
@@ -12,7 +13,7 @@ public class TagListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onPing(org.kitteh.tag.AsyncPlayerReceiveNameTagEvent e) {
+	public void onPing(AsyncPlayerReceiveNameTagEvent e) {
 		final Player p = e.getNamedPlayer();
 		final String group = cg.getGroup(p);
 		for (ChatProfile c : cg.getChatProfiles()) {
