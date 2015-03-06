@@ -15,15 +15,14 @@ public final class ChatProfile {
     private String format;
     private ChatColor tagColor;
 
-    public ChatProfile(String a, String b, String c, String d, String e, String f,
-                       String g) {
-        this.group = a;
-        this.tagColor = ChatColor.getByChar(g.replace("&", ""));
-        this.setShownGroup(b);
-        this.setPrefix(c);
-        this.setSuffix(d);
-        this.setMuffix(e);
-        this.format(f);
+    public ChatProfile(String... a) {
+        this.group = a[0];
+        this.tagColor = ChatColor.getByChar(a[6].replace("&", ""));
+        this.setShownGroup(a[1]);
+        this.setPrefix(a[2]);
+        this.setSuffix(a[3]);
+        this.setMuffix(a[4]);
+        this.format(a[5]);
     }
 
     public String getPrefix() {
@@ -68,8 +67,7 @@ public final class ChatProfile {
 
     public String getFormat(String message) {
         if (message.contains("&")) {
-            return this.format
-                    .replace("%2$s", translateAlternateColorCodes('&', message));
+            return this.format.replace("%2$s", translateAlternateColorCodes('&', message));
         }
         return this.format;
     }
@@ -84,8 +82,6 @@ public final class ChatProfile {
 
     private void format(String mat) {
         String m = mat.substring(0, 1);
-        this.format = mat.replace(m + "%g", prefix + m + showngroup)
-                .replace("%p", suffix + "%1$s").replace("%m", muffix + "%2$s")
-                .replace("null", WHITE.toString());
+        this.format = mat.replace(m + "%g", prefix + m + showngroup).replace("%p", suffix + "%1$s").replace("%m", muffix + "%2$s").replace("null", WHITE.toString());
     }
 }
