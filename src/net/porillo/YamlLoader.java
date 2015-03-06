@@ -65,7 +65,7 @@ public abstract class YamlLoader {
      * @param e ShownGroup
      * @param f Format
      */
-    protected void createNewGroup(String a, String b, String c, String d, String e,
+    public void createNewGroup(String a, String b, String c, String d, String e,
                                   String f) {
         ConfigurationSection groups = config.getConfigurationSection("groups");
         if (groups.contains(a)) {
@@ -81,6 +81,15 @@ public abstract class YamlLoader {
         keys.set("Format", f);
         this.saveConfig();
     }
+    
+    public void editGroup(String group, String key, String value) {
+        ConfigurationSection groups = config.getConfigurationSection("groups");
+        if (groups.contains(group)) {
+            ConfigurationSection keys = groups.getConfigurationSection(group);
+            keys.set(key, value);            
+            this.saveConfig();
+        }
+    }
 
     /**
      * Api method to delete a group from config
@@ -88,7 +97,7 @@ public abstract class YamlLoader {
      * @param group
      * @throws NullPointerException if the group doesn't exist
      */
-    protected void deleteGroup(final String group) {
+    public void deleteGroup(final String group) {
         ConfigurationSection groups = config.getConfigurationSection("groups");
         if (groups.contains(group)) {
             groups.set(group, null);
