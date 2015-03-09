@@ -1,6 +1,5 @@
 package net.porillo;
 
-import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -16,9 +15,7 @@ public class VaultImporter {
     }
 
     protected void run(boolean override) {
-        if (cg.getConfiguration().importer || override) {
-            this.runImport(getPerms(), getChat());
-        }
+        if (cg.getConfiguration().importer || override) this.runImport(getPerms());
     }
 
     private Permission getPerms() {
@@ -29,18 +26,11 @@ public class VaultImporter {
         return null;
     }
 
-    private Chat getChat() {
-        if (vault != null && vault.isEnabled()) {
-            RegisteredServiceProvider<Chat> rsp = cg.getServer().getServicesManager().getRegistration(Chat.class);
-            return rsp.getProvider();
-        }
-        return null;
-    }
-
-    private void runImport(Permission perms, Chat chat) {
+    private void runImport(Permission perms) {
         Config conf = cg.getConfiguration();
-        if (perms == null || chat == null) {
-            cg.warn("Vault ");          
+        if (perms == null) {
+            cg.warn("Vault could not find a permissions plugin");
+            throw new NoClassDefFoundError("Vault could not find a permissions plugin");
         } else {
             for (String section : cg.getConfig().getConfigurationSection("groups").getKeys(false)) {
                 conf.deleteGroup(section);
@@ -48,7 +38,7 @@ public class VaultImporter {
             }
             conf.reload();
             for (String group : perms.getGroups()) {
-                if(conf.existsGroup(group)) {
+                if (conf.existsGroup(group)) {
                     cg.debug("Skipping " + group);
                     continue;
                 }
@@ -59,5 +49,5 @@ public class VaultImporter {
         }
         conf.set("options", "import", false);
     }
-    
+
 }

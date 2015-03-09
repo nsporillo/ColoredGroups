@@ -32,7 +32,6 @@ public final class Config {
         }
     }
 
-
     public void set(String section, String key, Object value) {
         plugin.getConfig().getConfigurationSection(section).set(key, value);
         plugin.saveConfig();
@@ -65,7 +64,7 @@ public final class Config {
         else throw new UnsupportedOperationException("Group '" + group + "' does not exist");
         plugin.saveConfig();
     }
-    
+
     public boolean existsGroup(String group) {
         return plugin.getConfig().getConfigurationSection("groups").getKeys(false).contains(group);
     }
