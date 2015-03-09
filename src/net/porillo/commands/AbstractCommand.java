@@ -70,6 +70,6 @@ public abstract class AbstractCommand implements Command {
     }
 
     public void sendMessage(CommandSender sender, String message) {
-        sender.sendMessage(AQUA + "[ColoredGroups] " + message);
+        sender.sendMessage(AQUA + "[CG] " + message);
     }
 }
