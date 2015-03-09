@@ -20,21 +20,21 @@ import static org.bukkit.ChatColor.RED;
 public class ColoredGroups extends JavaPlugin {
 
     private List<ChatStyle> formats = new ArrayList<ChatStyle>();
-    private ImportationWorker importer;
-    private YamlConfig conf;
+    private VaultImporter importer;
+    private Config conf;
     private Permission perms;
 
     @Override
     public void onEnable() {
-        this.conf = new YamlConfig(this, "config.yml");
+        this.conf = new Config(this);
         this.perms = getPerms();
         this.afterEnable();
-        getPluginManager().registerEvents(new ChatHandler(this), this);
+        getPluginManager().registerEvents(new ChatListener(this), this);
         if (getPluginManager().getPlugin("TagAPI") != null) {
             getPluginManager().registerEvents(new TagListener(this), this);
         }
         this.getCommand("coloredgroups").setExecutor(new Commands(this));
-        this.importer = new ImportationWorker(this);
+        this.importer = new VaultImporter(this);
         this.runImport(false);
 
     }
@@ -61,7 +61,7 @@ public class ColoredGroups extends JavaPlugin {
                 if (ColoredGroups.this.getConfiguration().override) {
                     for (RegisteredListener rl : AsyncPlayerChatEvent.getHandlerList()
                             .getRegisteredListeners()) {
-                        if (rl.getListener().getClass().getSimpleName().equals("ChatHandler")) {
+                        if (rl.getListener().getClass().getSimpleName().equals("ChatListener")) {
                             continue;
                         }
                         AsyncPlayerChatEvent.getHandlerList().unregister(rl.getListener());
@@ -132,7 +132,7 @@ public class ColoredGroups extends JavaPlugin {
         return formats;
     }
 
-    public YamlConfig getConfiguration() {
+    public Config getConfiguration() {
         return this.conf;
     }
 
