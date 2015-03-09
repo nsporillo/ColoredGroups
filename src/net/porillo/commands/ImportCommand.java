@@ -30,7 +30,6 @@ public class ImportCommand extends AbstractCommand {
             super.plugin.runImport(true);
         } catch (Exception ex) {
             sender.sendMessage(RED + "Error: " + ex.getMessage());
-            sender.sendMessage(RED + "Vault couldn't find any chat providers to import from");
         }
         super.sendMessage(sender, GREEN + "Imported groups via vault!");
     }
