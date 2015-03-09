@@ -9,21 +9,21 @@
 groups:
   # List your servers groups here. Make sure you have the correct case (upper / lower)
   default:
-    Format: '&f[&2%group&f][&e%world&f]&b%username: &f%message'
-    ShownGroup: 'Default'
-    TagColor: '&f'
+    format: '&f[&2%group&f][&e%world&f]&b%username: &f%message'
+    shown-group: 'Default'
+    tag-color: '&f'
   moderator:
-    Format: '&5[%group&5]&d%username: &f%message'
-    ShownGroup: 'Moderator&5][&7BOSS'
-    TagColor: '&f'
+    format: '&5[%group&5]&d%username: &f%message'
+    shown-group: 'Moderator&5][&7BOSS'
+    tag-color: '&f'
   admin:
-    Format: '&c[%group&c]&e%username: &f%message'
-    ShownGroup: 'Administrator'
-    TagColor: '&f'
+    format: '&c[%group&c]&e%username: &f%message'
+    shown-group: 'Administrator'
+    tag-color: '&f'
   owner:
-    Format: '&f[&4%group&f]&9&n%username&6: %message'
-    ShownGroup: 'Owner'
-    TagColor: '&4'
+    format: '&f[&4%group&f]&9&n%username&6: %message'
+    shown-group: 'Owner'
+    tag-color: '&4'
 
 # Advanced options
 options:
