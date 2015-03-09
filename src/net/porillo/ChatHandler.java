@@ -16,18 +16,13 @@ public class ChatHandler implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent e) {
-        final String group = cg.getGroup(e.getPlayer());
-        for (ChatProfile c : cg.getChatProfiles()) {
-            if (c.getGroup().equalsIgnoreCase(group)) {
-                if (canColorize(e.getPlayer())) {
-                    if (e.getMessage().contains("%")) {
-                        e.setFormat(c.getFormat());
-                        return;
-                    }
-                    e.setFormat(c.getFormat(e.getMessage()));
-                    return;
-                }
-                e.setFormat(c.getFormat());
+        final Player player = e.getPlayer();
+        final String group = cg.getGroup(player);
+        for(ChatStyle cf : cg.getFormats()) {
+            if(cf.getGroup().equals(group)) {
+                e.setFormat("%2$s"); // set format so only our msg is displayed
+                String msg = cf.format(canColorize(player), player.getWorld().getName(), player.getName(), e.getMessage());
+                e.setMessage(msg);
                 return;
             }
         }
@@ -37,7 +32,6 @@ public class ChatHandler implements Listener {
     }
 
     private boolean canColorize(Player sender) {
-        return cg.getConfiguration().cchat || sender
-                .hasPermission("coloredgroups.coloredchat");
+        return cg.getConfiguration().cchat || sender.hasPermission("coloredgroups.coloredchat");
     }
 }

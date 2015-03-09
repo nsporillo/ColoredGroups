@@ -5,7 +5,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public final class YamlConfig extends YamlLoader {
 
-    public boolean debug, igs, backup, importer, cchat, override;
+    public boolean debug, importer, cchat, override;
 
     public YamlConfig(ColoredGroups plugin, String fileName) {
         super(plugin, fileName);
@@ -18,27 +18,14 @@ public final class YamlConfig extends YamlLoader {
         this.update();
         FileConfiguration yaml = super.getYaml();
         this.debug = yaml.getBoolean("options.debug", false);
-        this.igs = yaml.getBoolean("options.in-game-set", true);
-        this.backup = yaml.getBoolean("options.backup-on-disable", true);
         this.cchat = yaml.getBoolean("options.allow-color-codes");
         this.importer = yaml.getBoolean("options.import", false);
         this.override = yaml.getBoolean("options.override", false);
         ConfigurationSection groups = yaml.getConfigurationSection("groups");
         for (String keys : groups.getKeys(false)) {
             ConfigurationSection vars = groups.getConfigurationSection(keys);
-            if (vars.getString("ShownGroup") == null) {
-                vars.set("ShownGroup", vars.getName());
-                super.saveConfig();
-            }
-            if (vars.getString("Color") == null) {
-                vars.set("Color", "&f");
-                super.saveConfig();
-            }
-            super.plugin.getChatProfiles().add(
-                    new ChatProfile(vars.getName(), vars.getString("ShownGroup"), vars
-                            .getString("Prefix"), vars.getString("Suffix"), vars
-                            .getString("Muffix"), vars.getString("Format"), vars
-                            .getString("Color")));
+            ChatStyle cf = new ChatStyle(vars.getName(), vars.getString("Format"), vars.getString("ShownGroup"), vars.getString("TagColor"));
+            plugin.getFormats().add(cf);
         }
     }
 
@@ -55,12 +42,6 @@ public final class YamlConfig extends YamlLoader {
             }
             if (options.get("import") == null) {
                 this.set("options", "import", false);
-            }
-            if (options.get("in-game-set") == null) {
-                this.set("options", "in-game-set", true);
-            }
-            if (options.get("backup-on-disable") == null) {
-                this.set("options", "backup-on-disable", true);
             }
             if (options.get("allow-color-codes") == null) {
                 this.set("options", "allow-color-codes", false);

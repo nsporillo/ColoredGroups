@@ -19,9 +19,8 @@ import static org.bukkit.ChatColor.RED;
 
 public class ColoredGroups extends JavaPlugin {
 
-    private List<ChatProfile> profiles = new ArrayList<ChatProfile>(5);
+    private List<ChatStyle> formats = new ArrayList<ChatStyle>();
     private ImportationWorker importer;
-    private BackupManager backup;
     private YamlConfig conf;
     private Permission perms;
 
@@ -35,7 +34,6 @@ public class ColoredGroups extends JavaPlugin {
             getPluginManager().registerEvents(new TagListener(this), this);
         }
         this.getCommand("coloredgroups").setExecutor(new Commands(this));
-        this.backup = new BackupManager(this);
         this.importer = new ImportationWorker(this);
         this.runImport(false);
 
@@ -43,10 +41,7 @@ public class ColoredGroups extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.profiles.clear();
-        if (this.getConfiguration().backup) {
-            this.getBackupManager().create(50);
-        }
+        this.formats.clear();
     }
 
     private Permission getPerms() {
@@ -106,16 +101,16 @@ public class ColoredGroups extends JavaPlugin {
     }
 
     public void reload() {
-        this.profiles.clear();
+        this.formats.clear();
         this.conf.reload();
     }
 
     public String getGroup(final Player p) {
         return getGroup(p.getWorld().getName(), p.getName());
     }
-    
+
     public String getGroup(String world, String name) {
-       return perms.getPrimaryGroup(world, name);
+        return perms.getPrimaryGroup(world, name);
     }
 
     public void retag() {
@@ -125,7 +120,7 @@ public class ColoredGroups extends JavaPlugin {
     }
 
     public String getTestMessage(String group) {
-        for (ChatProfile c : this.profiles) {
+        for (ChatStyle c : this.formats) {
             if (c.getGroup().equalsIgnoreCase(group)) {
                 return c.getExample();
             }
@@ -133,24 +128,12 @@ public class ColoredGroups extends JavaPlugin {
         return RED + "No groups match that name";
     }
 
-    public boolean isGroup(String group) {
-        for (ChatProfile c : this.getChatProfiles()) {
-            if (c.getGroup().equalsIgnoreCase(group)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public List<ChatProfile> getChatProfiles() {
-        return profiles;
+    public List<ChatStyle> getFormats() {
+        return formats;
     }
 
     public YamlConfig getConfiguration() {
         return this.conf;
     }
 
-    public BackupManager getBackupManager() {
-        return this.backup;
-    }
 }

@@ -6,12 +6,21 @@ import org.bukkit.command.CommandSender;
 
 import static org.bukkit.ChatColor.*;
 
-public final class Commands implements CommandExecutor {
+public class Commands implements CommandExecutor {
 
     private final String pre = AQUA + "[ColoredGroups] ";
-    private final String[] cmds = {"/cg help", "/cg test all", "/cg backup", "/cg import", "/cg test <group>", "/cg reload hooks", "/cg reload config",};
-    private final String[] helps = {"Help command for ColoredGroups", "Tests all groups chat msgs", "Backs up config", "Imports values from prev. plugin",
-            "Tests specific groups chat msgs", "Rehooks into permissions", "Reloads variables from config",};
+    private final String[] cmds = {
+            "/cg help",
+            "/cg test all",
+            "/cg import",
+            "/cg test <group>",
+            "/cg reload config",};
+    private final String[] helps = {
+            "Help command for ColoredGroups",
+            "Tests all groups chat msgs",
+            "Imports values from prev. plugin",
+            "Tests specific groups chat msgs",
+            "Reloads variables from config",};
     private ColoredGroups cg;
 
     protected Commands(final ColoredGroups cg1) {
@@ -50,13 +59,6 @@ public final class Commands implements CommandExecutor {
             for (int i = 0; i < cmds.length; i++) {
                 sender.sendMessage(YELLOW + "[" + (i + 1) + "] " + cmds[i] + WHITE + " - " + GOLD + helps[i]);
             }
-        } else if (args[0].equalsIgnoreCase("backup")) {
-            if (sender.hasPermission("coloredgroups.backup")) {
-                this.cg.getBackupManager().create(50);
-                sender.sendMessage(GREEN + "Created a backup of the current config");
-            } else {
-                sender.sendMessage(RED + "You don't have permission to create backups");
-            }
         } else if (args[0].equalsIgnoreCase("import")) {
             if (sender.hasPermission("coloredgroups.import")) {
                 try {
@@ -70,17 +72,10 @@ public final class Commands implements CommandExecutor {
             } else {
                 sender.sendMessage(RED + "You don't have permission to import groups");
             }
-        } else if (args[0].equalsIgnoreCase("purge")) {
-            if (sender.hasPermission("coloredgroups.backup.purge")) {
-                this.cg.getBackupManager().purge();
-                sender.sendMessage(GREEN + "Purged all backups from the backup directory");
-            } else {
-                sender.sendMessage(RED + "You don't have permission to purge backups");
-            }
         } else if (args[0].equalsIgnoreCase("create")) {
             if (sender.hasPermission("coloredgroups.create")) {
                 try {
-                    this.cg.getConfiguration().createNewGroup(args[1], "&", "&", "&", "[%g]%p: %m", args[1]);
+                    this.cg.getConfiguration().createNewGroup(args[1]);
                     sender.sendMessage(GREEN + "Created an empty section in config for " + args[1]);
                 } catch (Exception ex) {
                     if (ex.getLocalizedMessage().equals("1")) {
@@ -88,13 +83,13 @@ public final class Commands implements CommandExecutor {
                     }
                 }
             } else {
-                sender.sendMessage(RED + "You don't have permission to purge backups");
+                sender.sendMessage(RED + "You don't have permission to create groups");
             }
         } else if (args[0].equalsIgnoreCase("test")) {
             if (sender.hasPermission("coloredgroups.test")) {
                 try {
                     if (args[1].equalsIgnoreCase("all")) {
-                        for (ChatProfile c : cg.getChatProfiles()) {
+                        for (ChatStyle c : cg.getFormats()) {
                             sender.sendMessage(c.getExample());
                         }
                     } else {

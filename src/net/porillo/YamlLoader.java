@@ -58,35 +58,23 @@ public abstract class YamlLoader {
     /**
      * Api method to create a new config section for a group
      *
-     * @param a Group Name
-     * @param b Prefix
-     * @param c Suffix
-     * @param d Muffix
-     * @param e ShownGroup
-     * @param f Format
+     * @param group Group Name
      */
-    public void createNewGroup(String a, String b, String c, String d, String e,
-                                  String f) {
+    public void createNewGroup(String group) {
         ConfigurationSection groups = config.getConfigurationSection("groups");
-        if (groups.contains(a)) {
+        if (groups.contains(group)) {
             throw new UnsupportedOperationException(
                     "Cannot create duplicate group in config!");
         }
-        groups.createSection(a);
-        ConfigurationSection keys = groups.getConfigurationSection(a);
-        keys.set("Prefix", b);
-        keys.set("Suffix", c);
-        keys.set("Muffix", d);
-        keys.set("ShownGroup", e);
-        keys.set("Format", f);
+        groups.createSection(group);
         this.saveConfig();
     }
-    
+
     public void editGroup(String group, String key, String value) {
         ConfigurationSection groups = config.getConfigurationSection("groups");
         if (groups.contains(group)) {
             ConfigurationSection keys = groups.getConfigurationSection(group);
-            keys.set(key, value);            
+            keys.set(key, value);
             this.saveConfig();
         }
     }

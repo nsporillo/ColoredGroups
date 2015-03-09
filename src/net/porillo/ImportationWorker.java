@@ -56,9 +56,7 @@ public class ImportationWorker {
         if (perms != null && chat != null) {
             this.cleanse();
             for (String group : perms.getGroups()) {
-                cg.getConfiguration().createNewGroup(capitalize(group),
-                        chat.getGroupPrefix(world, group), chat.getGroupSuffix(world, group), "&f",
-                        "[%g]%p: %m", capitalize(group));
+                cg.getConfiguration().createNewGroup(capitalize(group));
                 cg.debug("Imported " + group);
             }
             cg.getConfiguration().set("options", "import", false);

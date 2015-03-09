@@ -17,7 +17,7 @@ public class TagListener implements Listener {
     public void onPing(AsyncPlayerReceiveNameTagEvent e) {
         final Player p = e.getNamedPlayer();
         final String group = cg.getGroup(p);
-        for (ChatProfile c : cg.getChatProfiles()) {
+        for (ChatStyle c : cg.getFormats()) {
             if (c.getGroup().equalsIgnoreCase(group)) {
                 String tahg = c.getTagColor() + p.getDisplayName();
                 if (tahg.length() < 16) {
