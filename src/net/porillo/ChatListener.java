@@ -18,8 +18,8 @@ public class ChatListener implements Listener {
     public void onChat(AsyncPlayerChatEvent e) {
         final Player player = e.getPlayer();
         final String group = cg.getGroup(player);
-        for(ChatStyle cf : cg.getFormats()) {
-            if(cf.getGroup().equals(group)) {
+        for (ChatStyle cf : cg.getFormats()) {
+            if (cf.getGroup().equals(group)) {
                 e.setFormat("%2$s"); // set format so only our msg is displayed
                 String msg = cf.format(canColorize(player), player.getWorld().getName(), player.getName(), e.getMessage());
                 e.setMessage(msg);

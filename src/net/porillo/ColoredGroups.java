@@ -1,6 +1,9 @@
 package net.porillo;
 
 import net.milkbowl.vault.permission.Permission;
+import net.porillo.commands.CommandHandler;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredListener;
@@ -18,6 +21,7 @@ import static org.kitteh.tag.TagAPI.refreshPlayer;
 public class ColoredGroups extends JavaPlugin {
 
     private final List<ChatStyle> formats = new ArrayList<ChatStyle>();
+    private CommandHandler handler;
     private VaultImporter importer;
     private Config conf;
     private Permission perms;
@@ -31,15 +35,20 @@ public class ColoredGroups extends JavaPlugin {
         if (getPluginManager().getPlugin("TagAPI") != null) {
             getPluginManager().registerEvents(new TagListener(this), this);
         }
-        this.getCommand("coloredgroups").setExecutor(new Commands(this));
+        this.handler = new CommandHandler(this);
         this.importer = new VaultImporter(this);
         this.runImport(false);
-
     }
 
     @Override
     public void onDisable() {
         this.formats.clear();
+    }
+
+    @Override
+    public boolean onCommand(CommandSender s, Command c, String l, String[] a) {
+        handler.runCommand(s, l, a);
+        return true;
     }
 
     private Permission getPerms() {
@@ -59,14 +68,10 @@ public class ColoredGroups extends JavaPlugin {
                     for (RegisteredListener rl : getHandlerList().getRegisteredListeners()) {
                         if (rl.getListener().getClass().getSimpleName().equals("ChatListener")) continue;
                         getHandlerList().unregister(rl.getListener());
-                        ColoredGroups.this.warn("Overrode " + rl.getPlugin().getName() + "'s chat listening");
+                        ColoredGroups.this.debug("Overrode " + rl.getPlugin().getName() + "'s chat listening");
                     }
             }
         }, 1L);
-    }
-
-    public void log(String log) {
-        this.getLogger().info(log);
     }
 
     public void debug(String debug) {

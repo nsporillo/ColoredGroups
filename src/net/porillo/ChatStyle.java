@@ -20,7 +20,7 @@ public class ChatStyle {
         String chat = format.replace("%group", shownGroup);
         chat = chat.replace("%world", vars[0]);
         chat = chat.replace("%username", vars[1]);
-        if(!colorize) {
+        if (!colorize) {
             ChatColor.translateAlternateColorCodes('&', chat);
             return chat.replace("%message", vars[2]);
         }
