@@ -6,11 +6,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-public class ChatHandler implements Listener {
+public class ChatListener implements Listener {
 
     private ColoredGroups cg;
 
-    public ChatHandler(ColoredGroups cg) {
+    public ChatListener(ColoredGroups cg) {
         this.cg = cg;
     }
 
