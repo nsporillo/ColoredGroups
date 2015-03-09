@@ -4,7 +4,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public final class Config {
 
-    private ColoredGroups plugin;
+    private final ColoredGroups plugin;
     public boolean debug, importer, cchat, override;
 
     public Config(ColoredGroups plugin) {

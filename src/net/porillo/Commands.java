@@ -21,7 +21,7 @@ public class Commands implements CommandExecutor {
             "Imports values from prev. plugin",
             "Tests specific groups chat msgs",
             "Reloads variables from config",};
-    private ColoredGroups cg;
+    private final ColoredGroups cg;
 
     protected Commands(final ColoredGroups cg1) {
         this.cg = cg1;

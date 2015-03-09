@@ -19,7 +19,7 @@ import static org.bukkit.ChatColor.RED;
 
 public class ColoredGroups extends JavaPlugin {
 
-    private List<ChatStyle> formats = new ArrayList<ChatStyle>();
+    private final List<ChatStyle> formats = new ArrayList<ChatStyle>();
     private VaultImporter importer;
     private Config conf;
     private Permission perms;
@@ -109,6 +109,7 @@ public class ColoredGroups extends JavaPlugin {
         return getGroup(p.getWorld().getName(), p.getName());
     }
 
+    @SuppressWarnings("deprecation")
     public String getGroup(String world, String name) {
         return perms.getPrimaryGroup(world, name);
     }

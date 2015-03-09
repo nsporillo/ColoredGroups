@@ -9,8 +9,8 @@ import static org.apache.commons.lang.WordUtils.capitalize;
 
 public class VaultImporter {
 
-    private ColoredGroups cg;
-    private Plugin vault;
+    private final ColoredGroups cg;
+    private final Plugin vault;
 
     protected VaultImporter(ColoredGroups cg) {
         this.cg = cg;

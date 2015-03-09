@@ -4,10 +4,10 @@ import org.bukkit.ChatColor;
 
 public class ChatStyle {
 
-    private String group;
-    private String format;
-    private String shownGroup;
-    private String tagColor;
+    private final String group;
+    private final String format;
+    private final String shownGroup;
+    private final String tagColor;
 
     public ChatStyle(String... options) {
         this.group = options[0];

@@ -7,7 +7,7 @@ import org.kitteh.tag.AsyncPlayerReceiveNameTagEvent;
 
 public class TagListener implements Listener {
 
-    private ColoredGroups cg;
+    private final ColoredGroups cg;
 
     public TagListener(ColoredGroups cg) {
         this.cg = cg;

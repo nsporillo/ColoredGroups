@@ -8,7 +8,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener {
 
-    private ColoredGroups cg;
+    private final ColoredGroups cg;
 
     public ChatListener(ColoredGroups cg) {
         this.cg = cg;
