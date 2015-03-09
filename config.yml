@@ -1,52 +1,42 @@
 # ColoredGroups v${project.version} Configuration
+# Support: http://dev.bukkit.org/bukkit-plugins/coloredgroups/
 # To make a new group, simply follow YAML format and make a new group indented by 2 spaces, it's name corresponds to a users permissions group
-# Use Color codes to represent colors 
-# Prefix is group name, Suffix is player name, Muffix is message 
-# These groups should match those in your supported permissions plugin
-# The ShownGroup is the group shown in chat
-# Formatting chat: %g = Group, %p = Name, %m = Message
-# You can change the [] to () or {} if you like, ex: (+g)
-# You can add spaces if you want, ex: [+g] %p: %m
+# Use color codes to add colors
+# Groups should exactly match those in your supported permissions plugin
+# Variables: %group (will display ShownGroup), %world, %username, %message , want %faction? tell me!
+# FYI: We work just fine with factions, but we dont offer customizing the faction tag yet :p
 # Want a color and a display modifier? Use 'color+modifier' Ex: '&4&n'
-# If you want the ability to use /cg set in game allow 'in-game-set'
-# If you want ColoredGroups to use vault to import groups, set import to true!
-# Set allow-color-codes to true to allow everyone to use color codes in chat
-# If set to false, requires 'coloredgroups.coloredchat' to use color codes in chat
 groups:
-  Default:
-    Prefix: '&2'
-    Suffix: '&b' 
-    Muffix: '&f'
-    Format: '[%g]%p: %m'
+  # List your servers groups here. Make sure you have the correct case (upper / lower)
+  default:
+    Format: '&f[&2%group&f][&e%world&f]&b%username: &f%message'
     ShownGroup: 'Default'
     TagColor: '&f'
-  Moderator:
-    Prefix: '&5'
-    Suffix: '&d'
-    Muffix: '&f'
-    Format: '[%g]%p: %m'
-    ShownGroup: 'Moderator][&7BOSS&5'
+  moderator:
+    Format: '&5[%group&5]&d%username: &f%message'
+    ShownGroup: 'Moderator&5][&7BOSS'
     TagColor: '&f'
-  Admin:
-    Prefix: '&c'
-    Suffix: '&e'
-    Muffix: '&f'
-    Format: '[%g]%p: %m'
+  admin:
+    Format: '&c[%group&c]&e%username: &f%message'
     ShownGroup: 'Administrator'
     TagColor: '&f'
-  Owner:
-    Prefix: '&4'
-    Suffix: '&9&n'
-    Muffix: '&6'
-    Format: '[%g]%p: %m'
+  owner:
+    Format: '&f[&4%group&f]&9&n%username&6: %message'
     ShownGroup: 'Owner'
     TagColor: '&4'
+
+# Advanced options
 options:
+  # Toggle debug messages, theres not too many built in
   debug: false
+  # Import your groups into ColoredGroups seamlessly :)
   import: false
-  in-game-set: true
-  backup-on-disable: true
+  # Allow anyone to use color codes in chat
   allow-color-codes: false
+  # Override all other plugins chat listening?
+  # Very useful, if other plugins interfere with our formatting, you can disable just those features that interfere!
+  # We remove their listener on chat events, that's all :)
+  # Leave disabled unless you specifically need it on :p
   override: false
   
   
