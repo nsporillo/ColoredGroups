@@ -15,7 +15,7 @@ public class ReloadCommand extends AbstractCommand {
         super.setName("reload");
         super.setPermission("coloredgroups.reload");
         super.setRequiredArgs(1);
-        super.addUsage("Reloads settings", "config|tags");
+        super.addUsage("Reloads setting (config or tag)", "setting");
     }
 
     @Override

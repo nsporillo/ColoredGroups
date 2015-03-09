@@ -14,7 +14,7 @@ public class TestCommand extends AbstractCommand {
         super.setName("test");
         super.setPermission("coloredgroups.test");
         super.setRequiredArgs(1);
-        super.addUsage("Test what chat will look like", "(group)|all");
+        super.addUsage("Test what chat will look like", "all");
     }
 
     @Override
