@@ -38,30 +38,35 @@ public final class Config {
         plugin.saveConfig();
     }
 
-    public void createNewGroup(String group) {
+    public void createNewGroup(String group) throws UnsupportedOperationException {
         ConfigurationSection groups = plugin.getConfig().getConfigurationSection("groups");
-        if (groups.contains(group)) throw new UnsupportedOperationException("Cannot create duplicate group in config!");
-        groups.createSection(group);
-        ConfigurationSection keys = groups.getConfigurationSection(group);
+        if (existsGroup(group)) {
+            throw new UnsupportedOperationException("Group '" + group + "' is already in config!");
+        }
+        ConfigurationSection keys = groups.createSection(group);
         keys.set("format", "[%group]%username:&f %message");
         keys.set("shown-group", group);
         keys.set("tag-color", "&f");
         plugin.saveConfig();
     }
 
-    public void editGroup(String group, String key, String value) {
+    public void editGroup(String group, String key, String value) throws UnsupportedOperationException {
         ConfigurationSection groups = plugin.getConfig().getConfigurationSection("groups");
-        if (groups.contains(group)) {
+        if (existsGroup(group)) {
             ConfigurationSection keys = groups.getConfigurationSection(group);
             keys.set(key, value);
             plugin.saveConfig();
-        }
+        } else throw new UnsupportedOperationException("Group '" + group + "' does not exist");
     }
 
-    public void deleteGroup(final String group) {
+    public void deleteGroup(final String group) throws NullPointerException {
         ConfigurationSection groups = plugin.getConfig().getConfigurationSection("groups");
-        if (groups.contains(group)) groups.set(group, null);
-        else throw new NullPointerException("Group does not exist");
+        if (existsGroup(group)) groups.set(group, null);
+        else throw new UnsupportedOperationException("Group '" + group + "' does not exist");
         plugin.saveConfig();
+    }
+    
+    public boolean existsGroup(String group) {
+        return plugin.getConfig().getConfigurationSection("groups").getKeys(false).contains(group);
     }
 }

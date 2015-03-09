@@ -28,12 +28,9 @@ public class CreateCommand extends AbstractCommand {
         try {
             super.plugin.getConfiguration().createNewGroup(arg);
             super.sendMessage(sender, GREEN + "Created an empty section in config for " + arg);
+            super.plugin.reload();
         } catch (Exception ex) {
-            if (ex.getLocalizedMessage().equals("1")) {
-                super.sendMessage(sender, RED + "Error: /cg create <Group>");
-            } else {
-                ex.printStackTrace();
-            }
+            super.sendMessage(sender, RED + "Error: " + ex.getMessage());
         }
     }
 }

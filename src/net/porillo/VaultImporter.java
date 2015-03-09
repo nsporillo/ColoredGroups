@@ -37,24 +37,27 @@ public class VaultImporter {
         return null;
     }
 
-    private void cleanse() {
-        Config conf = cg.getConfiguration();
-        for (String section : cg.getConfig().getConfigurationSection("groups").getKeys(false)) {
-            conf.deleteGroup(section);
-        }
-    }
-
     private void runImport(Permission perms, Chat chat) {
+        Config conf = cg.getConfiguration();
         if (perms == null || chat == null) {
-            cg.warn("Vault was not found, import could not be done");
-            cg.getConfiguration().set("options", "import", false);
+            cg.warn("Vault ");          
         } else {
-            this.cleanse();
+            for (String section : cg.getConfig().getConfigurationSection("groups").getKeys(false)) {
+                conf.deleteGroup(section);
+                cg.debug("Deleting " + section);
+            }
+            conf.reload();
             for (String group : perms.getGroups()) {
-                cg.getConfiguration().createNewGroup(group);
+                if(conf.existsGroup(group)) {
+                    cg.debug("Skipping " + group);
+                    continue;
+                }
+                conf.createNewGroup(group);
                 cg.debug("Imported " + group);
             }
-            cg.getConfiguration().set("options", "import", false);
+            conf.reload();
         }
+        conf.set("options", "import", false);
     }
+    
 }

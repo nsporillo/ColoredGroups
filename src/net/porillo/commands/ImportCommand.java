@@ -30,7 +30,8 @@ public class ImportCommand extends AbstractCommand {
             super.plugin.runImport(true);
         } catch (Exception ex) {
             sender.sendMessage(RED + "Error: " + ex.getMessage());
+            return; 
         }
-        super.sendMessage(sender, GREEN + "Imported groups via vault!");
+        super.sendMessage(sender, GREEN + "Imported groups using vault!");
     }
 }
