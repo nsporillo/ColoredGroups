@@ -5,8 +5,6 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import static org.apache.commons.lang.WordUtils.capitalize;
-
 public class VaultImporter {
 
     private final ColoredGroups cg;
@@ -53,7 +51,7 @@ public class VaultImporter {
         } else {
             this.cleanse();
             for (String group : perms.getGroups()) {
-                cg.getConfiguration().createNewGroup(capitalize(group));
+                cg.getConfiguration().createNewGroup(group);
                 cg.debug("Imported " + group);
             }
             cg.getConfiguration().set("options", "import", false);
