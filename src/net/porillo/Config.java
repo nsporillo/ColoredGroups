@@ -27,7 +27,7 @@ public final class Config {
         ConfigurationSection groups = plugin.getConfig().getConfigurationSection("groups");
         for (String keys : groups.getKeys(false)) {
             ConfigurationSection vars = groups.getConfigurationSection(keys);
-            ChatStyle cf = new ChatStyle(vars.getName(), vars.getString("Format"), vars.getString("ShownGroup"), vars.getString("TagColor"));
+            ChatStyle cf = new ChatStyle(vars.getName(), vars.getString("format"), vars.getString("shown-group"), vars.getString("tag-color"));
             plugin.getFormats().add(cf);
         }
     }
@@ -42,6 +42,10 @@ public final class Config {
         ConfigurationSection groups = plugin.getConfig().getConfigurationSection("groups");
         if (groups.contains(group)) throw new UnsupportedOperationException("Cannot create duplicate group in config!");
         groups.createSection(group);
+        ConfigurationSection keys = groups.getConfigurationSection(group);
+        keys.set("format", "[%group]%username:&f %message");
+        keys.set("shown-group", group);
+        keys.set("tag-color", "&f");
         plugin.saveConfig();
     }
 
