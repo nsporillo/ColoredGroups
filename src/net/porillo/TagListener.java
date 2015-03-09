@@ -25,11 +25,7 @@ public class TagListener implements Listener {
                     return;
                 }
                 String tag = c.getTagColor() + p.getName();
-                if (tag.length() < 16) {
-                    e.setTag(tag);
-                } else {
-                    e.setTag(c.getTagColor() + p.getName().substring(0, 14));
-                }
+                e.setTag(tag.length() < 16 ? tag : c.getTagColor() + p.getName().substring(0, 14));
             }
         }
     }
