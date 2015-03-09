@@ -62,7 +62,7 @@ public class Commands implements CommandExecutor {
         } else if (args[0].equalsIgnoreCase("import")) {
             if (sender.hasPermission("coloredgroups.import")) {
                 try {
-                    new VaultImporter(cg).run(true);
+                    cg.runImport(true);
                 } catch (Exception ex) {
                     sender.sendMessage(RED + "Error: " + ex.getMessage());
                     sender.sendMessage(RED + "Vault couldn't find any chat providers to import from");
