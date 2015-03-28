@@ -22,7 +22,7 @@ public class ChatStyle {
         chat = chat.replace("%username", vars[1]);
         chat = chat.replace("%displayname", vars[2]);
         if (!colorize) {
-            ChatColor.translateAlternateColorCodes('&', chat);
+            chat = ChatColor.translateAlternateColorCodes('&', chat);
             return chat.replace("%message", vars[3]);
         }
         chat = chat.replace("%message", vars[3]);
