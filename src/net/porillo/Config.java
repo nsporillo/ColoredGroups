@@ -1,10 +1,16 @@
 package net.porillo;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public final class Config {
 
     private final ColoredGroups plugin;
+    private Map<String, String> worldAliases = new HashMap<String, String>();
     public boolean debug, importer, cchat, override;
 
     public Config(ColoredGroups plugin) {
@@ -29,6 +35,17 @@ public final class Config {
             ConfigurationSection vars = groups.getConfigurationSection(keys);
             ChatStyle cf = new ChatStyle(vars.getName(), vars.getString("format"), vars.getString("shown-group"), vars.getString("tag-color"));
             plugin.getFormats().add(cf);
+        }
+
+        ConfigurationSection worlds = plugin.getConfig().getConfigurationSection("worlds");
+        if(worlds == null) {
+            worlds = plugin.getConfig().createSection("worlds");
+            for(World world : Bukkit.getWorlds()) {
+                worlds.set(world.getName(), world.getName());
+            }
+        }
+        for(String world : worlds.getKeys(false)) {
+            worldAliases.put(world, worlds.getString(world));
         }
     }
 
@@ -67,5 +84,9 @@ public final class Config {
 
     public boolean existsGroup(String group) {
         return plugin.getConfig().getConfigurationSection("groups").getKeys(false).contains(group);
+    }
+
+    public Map<String, String> getWorldAliases(){
+        return worldAliases;
     }
 }

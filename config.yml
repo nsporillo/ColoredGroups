@@ -25,6 +25,15 @@ groups:
     shown-group: 'Owner'
     tag-color: '&4'
 
+# World aliases
+# If you'd like the %world variable to use a different string
+# Setup the link below :)
+worlds:
+  world: 'world'
+  world_nether: 'nether'
+  world_the_end: 'end'
+
+
 # Advanced options
 options:
   # Toggle debug messages, theres not too many built in
