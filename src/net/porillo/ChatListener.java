@@ -24,7 +24,7 @@ public class ChatListener implements Listener {
         for (ChatStyle cf : cg.getFormats()) {
             if (cf.getGroup().equals(group)) {
                 e.setFormat("%2$s"); // set format so only our msg is displayed
-                String msg = cf.format(canColorize(player), getWorld(player.getWorld()), player.getName(), e.getMessage());
+                String msg = cf.format(canColorize(player), getWorld(player.getWorld()), player.getName(), player.getDisplayName(), e.getMessage());
                 e.setMessage(msg);
                 return;
             }
