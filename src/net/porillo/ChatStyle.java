@@ -30,7 +30,7 @@ public class ChatStyle {
     }
 
     public String getExample() {
-        return format(true, "world", "player", "message");
+        return format(true, "world", "player", "player", "message");
     }
 
     public String getTagColor() {
