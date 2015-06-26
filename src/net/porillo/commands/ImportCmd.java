@@ -9,10 +9,10 @@ import java.util.List;
 import static org.bukkit.ChatColor.GREEN;
 import static org.bukkit.ChatColor.RED;
 
-public class ImportCommand extends AbstractCommand {
+public class ImportCmd extends AbstractCmd {
 
 
-    public ImportCommand(ColoredGroups cg) {
+    public ImportCmd(ColoredGroups cg) {
         super(cg);
         super.setName("import");
         super.setPermission("coloredgroups.import");

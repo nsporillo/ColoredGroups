@@ -24,7 +24,7 @@ public class ChatListener implements Listener {
         for (ChatStyle cf : cg.getFormats()) {
             if (cf.getGroup().equals(group)) {
                 e.setFormat("%2$s"); // set format so only our msg is displayed
-                String msg = cf.format(canColorize(player), getWorld(player.getWorld()), player.getName(), player.getDisplayName(), e.getMessage());
+                String msg = cf.format(canColor(player), mapAlias(player.getWorld()), player.getName(), player.getDisplayName(), e.getMessage());
                 e.setMessage(msg);
                 return;
             }
@@ -35,11 +35,11 @@ public class ChatListener implements Listener {
         }
     }
 
-    private boolean canColorize(Player sender) {
+    private boolean canColor(Player sender) {
         return cg.getConfiguration().cchat || sender.hasPermission("coloredgroups.coloredchat");
     }
 
-    private String getWorld(World world) {
+    private String mapAlias(World world) {
         Map<String, String> aliases = cg.getConfiguration().getWorldAliases();
         return aliases.containsKey(world.getName()) ? aliases.get(world.getName()) : world.getName();
     }

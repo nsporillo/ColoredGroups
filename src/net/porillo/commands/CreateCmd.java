@@ -8,9 +8,9 @@ import java.util.List;
 import static org.bukkit.ChatColor.GREEN;
 import static org.bukkit.ChatColor.RED;
 
-public class CreateCommand extends AbstractCommand {
+public class CreateCmd extends AbstractCmd {
 
-    public CreateCommand(ColoredGroups cg) {
+    public CreateCmd(ColoredGroups cg) {
         super(cg);
         super.setName("create");
         super.setPermission("coloredgroups.create");

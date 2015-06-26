@@ -7,9 +7,9 @@ import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-public class TestCommand extends AbstractCommand {
+public class TestCmd extends AbstractCmd {
 
-    public TestCommand(ColoredGroups cg) {
+    public TestCmd(ColoredGroups cg) {
         super(cg);
         super.setName("test");
         super.setPermission("coloredgroups.test");

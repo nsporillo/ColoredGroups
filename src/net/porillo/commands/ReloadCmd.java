@@ -8,9 +8,9 @@ import java.util.List;
 import static org.bukkit.ChatColor.GREEN;
 import static org.bukkit.ChatColor.RED;
 
-public class ReloadCommand extends AbstractCommand {
+public class ReloadCmd extends AbstractCmd {
 
-    public ReloadCommand(ColoredGroups cg) {
+    public ReloadCmd(ColoredGroups cg) {
         super(cg);
         super.setName("reload");
         super.setPermission("coloredgroups.reload");

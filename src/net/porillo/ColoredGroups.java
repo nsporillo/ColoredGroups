@@ -1,7 +1,7 @@
 package net.porillo;
 
 import net.milkbowl.vault.permission.Permission;
-import net.porillo.commands.CommandHandler;
+import net.porillo.commands.CmdHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,7 +21,7 @@ import static org.kitteh.tag.TagAPI.refreshPlayer;
 public class ColoredGroups extends JavaPlugin {
 
     private final List<ChatStyle> formats = new ArrayList<ChatStyle>();
-    private CommandHandler handler;
+    private CmdHandler handler;
     private VaultImporter importer;
     private Config conf;
     private Permission perms;
@@ -35,7 +35,7 @@ public class ColoredGroups extends JavaPlugin {
         if (getPluginManager().getPlugin("TagAPI") != null) {
             getPluginManager().registerEvents(new TagListener(this), this);
         }
-        this.handler = new CommandHandler(this);
+        this.handler = new CmdHandler(this);
         this.importer = new VaultImporter(this);
         this.runImport(false);
     }

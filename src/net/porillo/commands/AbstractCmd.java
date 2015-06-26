@@ -8,7 +8,7 @@ import java.util.List;
 
 import static org.bukkit.ChatColor.*;
 
-public abstract class AbstractCommand implements Command {
+public abstract class AbstractCmd implements Command {
 
     protected ColoredGroups plugin;
     private String name;
@@ -16,7 +16,7 @@ public abstract class AbstractCommand implements Command {
     private int required = 0;
     private List<String> usages = new ArrayList<String>();
 
-    public AbstractCommand(ColoredGroups cg) {
+    public AbstractCmd(ColoredGroups cg) {
         this.plugin = cg;
     }
 
