@@ -1,0 +1,20 @@
+name: ColoredGroups
+author: Nick Porillo 
+main: net.porillo.ColoredGroups
+website: http://porillo.net
+version: ${project.version}
+softdepend: [Vault]
+commands:
+  coloredgroups:
+    aliases: [cg, color]
+permissions:
+  coloredgroups.create:
+    description: Access to /cg create
+  coloredgroups.import:
+    description: Access to /cg import
+  coloredgroups.reload:
+    description: Access to /cg reload
+  coloredgroups.test:
+    description: Access to /cg test
+  coloredgroups.coloredchat:
+    description: Allows use of color codes in chat

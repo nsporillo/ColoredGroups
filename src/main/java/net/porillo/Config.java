@@ -30,21 +30,26 @@ public final class Config {
         this.cchat = plugin.getConfig().getBoolean("options.allow-color-codes");
         this.importer = plugin.getConfig().getBoolean("options.import", false);
         this.override = plugin.getConfig().getBoolean("options.override", false);
+
         ConfigurationSection groups = plugin.getConfig().getConfigurationSection("groups");
+        ConfigurationSection variables = plugin.getConfig().getConfigurationSection("variables");
         for (String keys : groups.getKeys(false)) {
             ConfigurationSection vars = groups.getConfigurationSection(keys);
             ChatStyle cf = new ChatStyle(vars.getName(), vars.getString("format"), vars.getString("shown-group"), vars.getString("tag-color"));
+            for (String var : variables.getKeys(false)) {
+                ConfigurationSection v = variables.getConfigurationSection(var);
+                cf.addVariable(new ChatVariable(var, v.getString("replace")));
+            }
             plugin.getFormats().add(cf);
         }
-
         ConfigurationSection worlds = plugin.getConfig().getConfigurationSection("worlds");
-        if(worlds == null) {
+        if (worlds == null) {
             worlds = plugin.getConfig().createSection("worlds");
-            for(World world : Bukkit.getWorlds()) {
+            for (World world : Bukkit.getWorlds()) {
                 worlds.set(world.getName(), world.getName());
             }
         }
-        for(String world : worlds.getKeys(false)) {
+        for (String world : worlds.getKeys(false)) {
             worldAliases.put(world, worlds.getString(world));
         }
     }
@@ -86,7 +91,7 @@ public final class Config {
         return plugin.getConfig().getConfigurationSection("groups").getKeys(false).contains(group);
     }
 
-    public Map<String, String> getWorldAliases(){
+    public Map<String, String> getWorldAliases() {
         return worldAliases;
     }
 }

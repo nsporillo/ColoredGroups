@@ -1,9 +1,14 @@
 package net.porillo;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChatStyle {
 
+    private final List<ChatVariable> chatVariables = new ArrayList<ChatVariable>();
     private final String group;
     private final String format;
     private final String shownGroup;
@@ -26,6 +31,9 @@ public class ChatStyle {
             return chat.replace("%message", vars[3]);
         }
         chat = chat.replace("%message", vars[3]);
+        for (ChatVariable cv : chatVariables) {
+            chat = chat.replace(cv.getRoot(), cv.run(Bukkit.getPlayer(vars[1])));
+        }
         return ChatColor.translateAlternateColorCodes('&', chat);
     }
 
@@ -39,5 +47,9 @@ public class ChatStyle {
 
     public String getGroup() {
         return group;
+    }
+
+    public void addVariable(ChatVariable cv) {
+        this.chatVariables.add(cv);
     }
 }

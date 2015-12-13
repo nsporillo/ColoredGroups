@@ -1,0 +1,61 @@
+# ColoredGroups v${project.version} Configuration
+# Support: http://dev.bukkit.org/bukkit-plugins/coloredgroups/
+# To make a new group, simply follow YAML format and make a new group indented by 2 spaces, it's name corresponds to a users permissions group
+# Use color codes to add colors
+# Groups should exactly match those in your supported permissions plugin
+# Variables: %group (will display ShownGroup), %world, %username, %displayname, %message
+# FYI: We work just fine with factions, but we dont offer customizing the faction tag yet :p
+# Want a color and a display modifier? Use 'color+modifier' Ex: '&4&n'
+groups:
+  # List your servers groups here. Make sure you have the correct case (upper / lower)
+  default:
+    format: '&2[%group]&6(%world)&3%displayname: &f%message'
+    shown-group: 'Default'
+    tag-color: '&f'
+  moderator:
+    format: '&5[%group&5]&d%username: &f%message'
+    shown-group: 'Moderator&5][&7BOSS'
+    tag-color: '&f'
+  admin:
+    format: '&c[%group&c]&e%username: &f%message'
+    shown-group: 'Administrator'
+    tag-color: '&f'
+  owner:
+    format: '&f[&4%group&f]&9&n%displayname&6: %message'
+    shown-group: 'Owner'
+    tag-color: '&4'
+
+
+# Formatting variables
+# Add additional variables to chat based on user-permission
+# For example; coloredgroups.variable.youtuber
+variables:
+  youtuber:
+    replace: 'Youtuber'
+  test:
+    replace: 'Test'
+
+# World aliases
+# If you'd like the %world variable to use a different string
+# Setup the link below :)
+worlds:
+  world: 'world'
+  world_nether: 'nether'
+  world_the_end: 'end'
+
+
+# Advanced options
+options:
+  # Toggle debug messages, theres not too many built in
+  debug: false
+  # Import your groups into ColoredGroups seamlessly :)
+  import: false
+  # Allow anyone to use color codes in chat
+  allow-color-codes: false
+  # Override all other plugins chat listening?
+  # Very useful, if other plugins interfere with our formatting, you can disable just those features that interfere!
+  # We remove their listener on chat events, that's all :)
+  # Leave disabled unless you specifically need it on :p
+  override: false
+  
+  
