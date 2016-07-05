@@ -1,5 +1,7 @@
-package net.porillo;
+package net.porillo.listener;
 
+import net.porillo.ChatStyle;
+import net.porillo.ColoredGroups;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

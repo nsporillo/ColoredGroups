@@ -1,4 +1,4 @@
-package net.porillo.commands;
+package net.porillo.command;
 
 
 import net.porillo.ColoredGroups;

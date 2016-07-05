@@ -1,5 +1,7 @@
-package net.porillo;
+package net.porillo.listener;
 
+import net.porillo.ChatStyle;
+import net.porillo.ColoredGroups;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,10 +22,12 @@ public class TagListener implements Listener {
         for (ChatStyle c : cg.getFormats()) {
             if (c.getGroup().equalsIgnoreCase(group)) {
                 String tahg = c.getTagColor() + p.getDisplayName();
+
                 if (tahg.length() < 16) {
                     e.setTag(tahg);
                     return;
                 }
+
                 String tag = c.getTagColor() + p.getName();
                 e.setTag(tag.length() < 16 ? tag : c.getTagColor() + p.getName().substring(0, 14));
             }

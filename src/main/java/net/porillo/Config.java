@@ -1,5 +1,6 @@
 package net.porillo;
 
+import lombok.Data;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -7,18 +8,19 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.HashMap;
 import java.util.Map;
 
+@Data
 public final class Config {
 
     private final ColoredGroups plugin;
     private Map<String, String> worldAliases = new HashMap<String, String>();
     public boolean debug, importer, cchat, override;
 
-    public Config(ColoredGroups plugin) {
+    Config(ColoredGroups plugin) {
         this.plugin = plugin;
         this.load();
     }
 
-    protected void reload() {
+    void reload() {
         plugin.reloadConfig();
         plugin.getFormats().clear();
         this.load();
@@ -33,22 +35,29 @@ public final class Config {
 
         ConfigurationSection groups = plugin.getConfig().getConfigurationSection("groups");
         ConfigurationSection variables = plugin.getConfig().getConfigurationSection("variables");
+
         for (String keys : groups.getKeys(false)) {
             ConfigurationSection vars = groups.getConfigurationSection(keys);
             ChatStyle cf = new ChatStyle(vars.getName(), vars.getString("format"), vars.getString("shown-group"), vars.getString("tag-color"));
+
             for (String var : variables.getKeys(false)) {
                 ConfigurationSection v = variables.getConfigurationSection(var);
                 cf.addVariable(new ChatVariable(var, v.getString("replace")));
             }
+
             plugin.getFormats().add(cf);
         }
+
         ConfigurationSection worlds = plugin.getConfig().getConfigurationSection("worlds");
+
         if (worlds == null) {
             worlds = plugin.getConfig().createSection("worlds");
+
             for (World world : Bukkit.getWorlds()) {
                 worlds.set(world.getName(), world.getName());
             }
         }
+
         for (String world : worlds.getKeys(false)) {
             worldAliases.put(world, worlds.getString(world));
         }
@@ -61,9 +70,11 @@ public final class Config {
 
     public void createNewGroup(String group) throws UnsupportedOperationException {
         ConfigurationSection groups = plugin.getConfig().getConfigurationSection("groups");
+
         if (existsGroup(group)) {
             throw new UnsupportedOperationException("Group '" + group + "' is already in config!");
         }
+
         ConfigurationSection keys = groups.createSection(group);
         keys.set("format", "[%group]%username:&f %message");
         keys.set("shown-group", group);
@@ -77,21 +88,24 @@ public final class Config {
             ConfigurationSection keys = groups.getConfigurationSection(group);
             keys.set(key, value);
             plugin.saveConfig();
-        } else throw new UnsupportedOperationException("Group '" + group + "' does not exist");
+        } else {
+            throw new UnsupportedOperationException("Group '" + group + "' does not exist");
+        }
     }
 
-    public void deleteGroup(final String group) throws NullPointerException {
+    void deleteGroup(final String group) throws NullPointerException {
         ConfigurationSection groups = plugin.getConfig().getConfigurationSection("groups");
-        if (existsGroup(group)) groups.set(group, null);
-        else throw new UnsupportedOperationException("Group '" + group + "' does not exist");
+
+        if (existsGroup(group)) {
+            groups.set(group, null);
+        } else {
+            throw new UnsupportedOperationException("Group '" + group + "' does not exist");
+        }
+
         plugin.saveConfig();
     }
 
-    public boolean existsGroup(String group) {
+    boolean existsGroup(String group) {
         return plugin.getConfig().getConfigurationSection("groups").getKeys(false).contains(group);
-    }
-
-    public Map<String, String> getWorldAliases() {
-        return worldAliases;
     }
 }

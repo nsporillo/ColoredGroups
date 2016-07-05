@@ -1,4 +1,4 @@
-package net.porillo.commands;
+package net.porillo.command;
 
 import net.porillo.ColoredGroups;
 import org.bukkit.ChatColor;
@@ -33,6 +33,7 @@ public class CmdHandler {
     public void showHelp(CommandSender s, String l) {
         s.sendMessage(ChatColor.BLUE + "------ " + ChatColor.GOLD + "ColoredGroups " + ChatColor.BLUE + "------");
         for (Command cmd : this.cmds.values())
-            if (cmd.checkPermission(s)) cmd.showHelp(s, l);
+            if (cmd.checkPermission(s))
+                cmd.showHelp(s, l);
     }
 }

@@ -4,18 +4,19 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-public class VaultImporter {
+class VaultImporter {
 
     private final ColoredGroups cg;
     private final Plugin vault;
 
-    protected VaultImporter(ColoredGroups cg) {
+    VaultImporter(ColoredGroups cg) {
         this.cg = cg;
         this.vault = cg.getServer().getPluginManager().getPlugin("Vault");
     }
 
-    protected void run(boolean override) {
-        if (cg.getConfiguration().importer || override) this.runImport(getPerms());
+    void run(boolean override) {
+        if (cg.getConfiguration().importer || override)
+            this.runImport(getPerms());
     }
 
     private Permission getPerms() {

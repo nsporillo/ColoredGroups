@@ -1,7 +1,10 @@
 package net.porillo;
 
+import lombok.Getter;
 import net.milkbowl.vault.permission.Permission;
-import net.porillo.commands.CmdHandler;
+import net.porillo.command.CmdHandler;
+import net.porillo.listener.ChatListener;
+import net.porillo.listener.TagListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,21 +23,23 @@ import static org.kitteh.tag.TagAPI.refreshPlayer;
 
 public class ColoredGroups extends JavaPlugin {
 
-    private final List<ChatStyle> formats = new ArrayList<ChatStyle>();
+    @Getter private final List<ChatStyle> formats = new ArrayList<ChatStyle>();
+    @Getter private Config configuration;
     private CmdHandler handler;
     private VaultImporter importer;
-    private Config conf;
     private Permission perms;
 
     @Override
     public void onEnable() {
-        this.conf = new Config(this);
+        this.configuration = new Config(this);
         this.perms = getPerms();
         this.afterEnable();
         getPluginManager().registerEvents(new ChatListener(this), this);
+
         if (getPluginManager().getPlugin("TagAPI") != null) {
             getPluginManager().registerEvents(new TagListener(this), this);
         }
+
         this.handler = new CmdHandler(this);
         this.importer = new VaultImporter(this);
         this.runImport(false);
@@ -53,10 +58,12 @@ public class ColoredGroups extends JavaPlugin {
 
     private Permission getPerms() {
         Plugin vault = getPluginManager().getPlugin("Vault");
+
         if (vault != null && vault.isEnabled()) {
             RegisteredServiceProvider<Permission> rsp = getServicesManager().getRegistration(Permission.class);
             return rsp.getProvider();
         }
+
         throw new RuntimeException("Vault not found");
     }
 
@@ -66,7 +73,9 @@ public class ColoredGroups extends JavaPlugin {
             public void run() {
                 if (ColoredGroups.this.getConfiguration().override)
                     for (RegisteredListener rl : getHandlerList().getRegisteredListeners()) {
-                        if (rl.getListener().getClass().getSimpleName().equals("ChatListener")) continue;
+                        if (rl.getListener().getClass().getSimpleName().equals("ChatListener"))
+                            continue;
+
                         getHandlerList().unregister(rl.getListener());
                         ColoredGroups.this.debug("Overrode " + rl.getPlugin().getName() + "'s chat listening");
                     }
@@ -90,7 +99,7 @@ public class ColoredGroups extends JavaPlugin {
 
     public void reload() {
         this.formats.clear();
-        this.conf.reload();
+        this.configuration.reload();
     }
 
     public String getGroup(final Player p) {
@@ -98,7 +107,7 @@ public class ColoredGroups extends JavaPlugin {
     }
 
     @SuppressWarnings("deprecation")
-    public String getGroup(String world, String name) {
+    private String getGroup(String world, String name) {
         return perms.getPrimaryGroup(world, name);
     }
 
@@ -114,15 +123,7 @@ public class ColoredGroups extends JavaPlugin {
                 return c.getExample();
             }
         }
+
         return RED + "No groups match that name";
     }
-
-    public List<ChatStyle> getFormats() {
-        return formats;
-    }
-
-    public Config getConfiguration() {
-        return this.conf;
-    }
-
 }
