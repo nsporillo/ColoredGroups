@@ -5,6 +5,7 @@ import net.milkbowl.vault.permission.Permission;
 import net.porillo.command.CmdHandler;
 import net.porillo.listener.ChatListener;
 import net.porillo.listener.TagListener;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -43,6 +44,8 @@ public class ColoredGroups extends JavaPlugin {
         this.handler = new CmdHandler(this);
         this.importer = new VaultImporter(this);
         this.runImport(false);
+
+        Metrics metrics = new Metrics(this);
     }
 
     @Override
