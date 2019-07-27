@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +31,10 @@ public class ChatStyle {
         }
 
         chat = chat.replace("%message", vars[3]);
+        final Player player = Bukkit.getPlayer(vars[1]);
 
         for (ChatVariable cv : chatVariables) {
-            chat = chat.replace(cv.getRoot(), cv.run(Bukkit.getPlayer(vars[1])));
+            chat = chat.replace(cv.getRoot(), cv.run(player));
         }
 
         return ChatColor.translateAlternateColorCodes('&', chat);

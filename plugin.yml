@@ -1,9 +1,10 @@
 name: ColoredGroups
-author: Nick Porillo 
+author: Nick Porillo
 main: net.porillo.ColoredGroups
 website: http://porillo.net
 version: ${project.version}
 softdepend: [Vault]
+api-version: 1.14
 commands:
   coloredgroups:
     aliases: [cg, color]

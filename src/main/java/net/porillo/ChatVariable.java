@@ -15,6 +15,6 @@ class ChatVariable {
     }
 
     String run(Player player) {
-        return player.hasPermission(permission) ? replace : "";
+        return player != null && player.hasPermission(permission) ? replace : "";
     }
 }

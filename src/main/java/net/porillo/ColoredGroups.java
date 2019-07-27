@@ -6,6 +6,7 @@ import net.porillo.command.CmdHandler;
 import net.porillo.listener.ChatListener;
 import net.porillo.listener.TagListener;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -34,6 +35,13 @@ public class ColoredGroups extends JavaPlugin {
     public void onEnable() {
         this.configuration = new Config(this);
         this.perms = getPerms();
+
+        if (this.perms == null) {
+            super.getLogger().severe("Vault not found. ColoredGroups disabling...");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+
         this.afterEnable();
         getPluginManager().registerEvents(new ChatListener(this), this);
 
@@ -64,10 +72,12 @@ public class ColoredGroups extends JavaPlugin {
 
         if (vault != null && vault.isEnabled()) {
             RegisteredServiceProvider<Permission> rsp = getServicesManager().getRegistration(Permission.class);
-            return rsp.getProvider();
+            if (rsp != null) {
+                return rsp.getProvider();
+            }
         }
 
-        throw new RuntimeException("Vault not found");
+        return null;
     }
 
     private void afterEnable() {
