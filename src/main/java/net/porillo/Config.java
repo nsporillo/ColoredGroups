@@ -12,7 +12,7 @@ import java.util.Map;
 public final class Config {
 
     private final ColoredGroups plugin;
-    private Map<String, String> worldAliases = new HashMap<String, String>();
+    private Map<String, String> worldAliases = new HashMap<>();
     public boolean debug, importer, cchat, override;
 
     Config(ColoredGroups plugin) {
@@ -22,7 +22,7 @@ public final class Config {
 
     void reload() {
         plugin.reloadConfig();
-        plugin.getFormats().clear();
+        plugin.getChatStyleMap().clear();
         this.load();
     }
 
@@ -38,14 +38,18 @@ public final class Config {
 
         for (String keys : groups.getKeys(false)) {
             ConfigurationSection vars = groups.getConfigurationSection(keys);
-            ChatStyle cf = new ChatStyle(vars.getName(), vars.getString("format"), vars.getString("shown-group"), vars.getString("tag-color"));
+            ChatStyle chatStyle = new ChatStyle(
+                    vars.getName(),
+                    vars.getString("format"),
+                    vars.getString("shown-group"),
+                    vars.getString("tag-color"));
 
             for (String var : variables.getKeys(false)) {
                 ConfigurationSection v = variables.getConfigurationSection(var);
-                cf.addVariable(new ChatVariable(var, v.getString("replace")));
+                chatStyle.addVariable(new ChatVariable(var, v.getString("replace")));
             }
 
-            plugin.getFormats().add(cf);
+            plugin.getChatStyleMap().put(vars.getName(), chatStyle);
         }
 
         ConfigurationSection worlds = plugin.getConfig().getConfigurationSection("worlds");

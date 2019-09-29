@@ -19,18 +19,17 @@ public class TagListener implements Listener {
     public void onPing(AsyncPlayerReceiveNameTagEvent e) {
         final Player p = e.getNamedPlayer();
         final String group = cg.getGroup(p);
-        for (ChatStyle c : cg.getFormats()) {
-            if (c.getGroup().equalsIgnoreCase(group)) {
-                String tahg = c.getTagColor() + p.getDisplayName();
+        if (cg.getChatStyleMap().containsKey(group)) {
+            ChatStyle chatStyle = cg.getChatStyleMap().get(group);
+            String tahg = chatStyle.getTagColor() + p.getDisplayName();
 
-                if (tahg.length() < 16) {
-                    e.setTag(tahg);
-                    return;
-                }
-
-                String tag = c.getTagColor() + p.getName();
-                e.setTag(tag.length() < 16 ? tag : c.getTagColor() + p.getName().substring(0, 14));
+            if (tahg.length() < 16) {
+                e.setTag(tahg);
+                return;
             }
+
+            String tag = chatStyle.getTagColor() + p.getName();
+            e.setTag(tag.length() < 16 ? tag : chatStyle.getTagColor() + p.getName().substring(0, 14));
         }
     }
 }

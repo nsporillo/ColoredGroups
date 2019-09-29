@@ -16,7 +16,10 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.bukkit.Bukkit.*;
 import static org.bukkit.ChatColor.RED;
@@ -25,7 +28,7 @@ import static org.kitteh.tag.TagAPI.refreshPlayer;
 
 public class ColoredGroups extends JavaPlugin {
 
-    @Getter private final List<ChatStyle> formats = new ArrayList<ChatStyle>();
+    @Getter private final Map<String, ChatStyle> chatStyleMap = new ConcurrentHashMap<>();
     @Getter private Config configuration;
     private CmdHandler handler;
     private VaultImporter importer;
@@ -57,11 +60,6 @@ public class ColoredGroups extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
-        this.formats.clear();
-    }
-
-    @Override
     public boolean onCommand(CommandSender s, Command c, String l, String[] a) {
         handler.runCommand(s, l, a);
         return true;
@@ -81,18 +79,15 @@ public class ColoredGroups extends JavaPlugin {
     }
 
     private void afterEnable() {
-        getScheduler().runTaskLater(this, new Runnable() {
-            @Override
-            public void run() {
-                if (ColoredGroups.this.getConfiguration().override)
-                    for (RegisteredListener rl : getHandlerList().getRegisteredListeners()) {
-                        if (rl.getListener().getClass().getSimpleName().equals("ChatListener"))
-                            continue;
+        getScheduler().runTaskLater(this, () -> {
+            if (ColoredGroups.this.getConfiguration().override)
+                for (RegisteredListener rl : getHandlerList().getRegisteredListeners()) {
+                    if (rl.getListener().getClass().getSimpleName().equals("ChatListener"))
+                        continue;
 
-                        getHandlerList().unregister(rl.getListener());
-                        ColoredGroups.this.debug("Overrode " + rl.getPlugin().getName() + "'s chat listening");
-                    }
-            }
+                    getHandlerList().unregister(rl.getListener());
+                    ColoredGroups.this.debug("Overrode " + rl.getPlugin().getName() + "'s chat listening");
+                }
         }, 1L);
     }
 
@@ -111,7 +106,7 @@ public class ColoredGroups extends JavaPlugin {
     }
 
     public void reload() {
-        this.formats.clear();
+        this.chatStyleMap.clear();
         this.configuration.reload();
     }
 
@@ -131,10 +126,8 @@ public class ColoredGroups extends JavaPlugin {
     }
 
     public String getTestMessage(String group) {
-        for (ChatStyle c : this.formats) {
-            if (c.getGroup().equalsIgnoreCase(group)) {
-                return c.getExample();
-            }
+        if (this.chatStyleMap.containsKey(group)) {
+            return this.chatStyleMap.get(group).getExample();
         }
 
         return RED + "No groups match that name";

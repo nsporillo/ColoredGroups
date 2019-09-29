@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatStyle {
 
-    private List<ChatVariable> chatVariables = new ArrayList<ChatVariable>();
+    private List<ChatVariable> chatVariables = new ArrayList<>();
     private final String group;
     private final String format;
     private final String shownGroup;
@@ -33,8 +33,10 @@ public class ChatStyle {
         chat = chat.replace("%message", vars[3]);
         final Player player = Bukkit.getPlayer(vars[1]);
 
-        for (ChatVariable cv : chatVariables) {
-            chat = chat.replace(cv.getRoot(), cv.run(player));
+        if (player != null && player.isOnline()) {
+            for (ChatVariable cv : chatVariables) {
+                chat = chat.replace(cv.getRoot(), cv.run(player));
+            }
         }
 
         return ChatColor.translateAlternateColorCodes('&', chat);

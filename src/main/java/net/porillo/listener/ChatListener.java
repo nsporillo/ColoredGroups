@@ -23,18 +23,31 @@ public class ChatListener implements Listener {
     public void onChat(AsyncPlayerChatEvent e) {
         final Player player = e.getPlayer();
         final String group = cg.getGroup(player);
-        for (ChatStyle cf : cg.getFormats()) {
-            if (cf.getGroup().equals(group)) {
-                e.setFormat("%2$s"); // set format so only our msg is displayed
-                String msg = cf.format(canColor(player), mapAlias(player.getWorld()), player.getName(), player.getDisplayName(), e.getMessage());
-                e.setMessage(msg);
-                return;
-            }
-        }
-        if (e.getFormat().equals("<%1$s> %2$s")) {
+        ChatStyle chatStyle = getStyle(group);
+        if (chatStyle != null) {
+            e.setFormat("%2$s"); // set format so only our msg is displayed
+            String msg = chatStyle.format(
+                    canColor(player),
+                    mapAlias(player.getWorld()),
+                    player.getName(),
+                    player.getDisplayName(),
+                    e.getMessage());
+            e.setMessage(msg);
+        } else {
             // fall back to a default format
             e.setFormat("[" + group + "]" + "%1$s: %2$s");
         }
+    }
+
+    private ChatStyle getStyle(String group) {
+        final String lowerGroup = group.toLowerCase();
+        if (cg.getChatStyleMap().containsKey(group)) {
+            return cg.getChatStyleMap().get(group);
+        } else if (cg.getChatStyleMap().containsKey(lowerGroup)) {
+            return cg.getChatStyleMap().get(lowerGroup);
+        }
+
+        return null;
     }
 
     private boolean canColor(Player sender) {

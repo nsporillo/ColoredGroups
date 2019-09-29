@@ -26,7 +26,7 @@ public class TestCmd extends AbstractCmd {
         String arg = args.get(0);
 
         if (arg.equalsIgnoreCase("all")) {
-            for (ChatStyle c : super.plugin.getFormats()) {
+            for (ChatStyle c : super.plugin.getChatStyleMap().values()) {
                 sender.sendMessage(c.getExample());
             }
         } else {
